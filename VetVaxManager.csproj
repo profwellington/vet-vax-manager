@@ -7,6 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Animal\**" />
+    <Content Remove="Models\Animal\**" />
+    <EmbeddedResource Remove="Models\Animal\**" />
+    <None Remove="Models\Animal\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Repository\IOwnerRepository.cs" />
+    <Compile Remove="Repository\OwnerRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="MySql.Data" Version="8.4.0" />
   </ItemGroup>
