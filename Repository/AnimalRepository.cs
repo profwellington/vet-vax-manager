@@ -60,7 +60,7 @@ namespace VetVaxManager.Repository
                         (animal, specie, owner) =>
                         {
                             animal.Specie = specie;
-                            animal.Owners = new List<Owner> { owner };
+                            animal.Owner = owner;
                             return animal;
                         },
                         new { OwnerId = ownerId },

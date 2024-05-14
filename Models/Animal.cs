@@ -10,6 +10,6 @@
         public decimal Weight { get; set; }
         public bool Alive { get; set; }
         public Specie Specie { get; set; }
-        public IList<Owner> Owners { get; set; }
+        public Owner Owner { get; set; }
     }
 }
