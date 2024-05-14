@@ -17,6 +17,46 @@ namespace VetVaxManager.Repository
             var connection = _configuration.GetSection("ConnectionStrings").GetSection("MySQLConnection").Value;
             return connection;
         }
+        public Animal GetAnimalById(int id)
+        {
+            var connectionString = this.GetConnection();
+
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string sql = @"
+                    SELECT 
+                        a.id AS AnimalId,
+                        a.nome AS Name,
+                        a.data_nascimento AS DateOfBirth,
+                        a.sexo AS Sex,
+                        a.raca AS Race,
+                        a.peso AS Weight,
+                        a.vivo AS Alive
+                    FROM 
+                        animais a
+                    WHERE 
+                        a.id = @AnimalId";
+
+                    var result = connection.Query<Animal>(
+                        sql,
+                        new { AnimalId = id }
+                    ).FirstOrDefault();
+
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
         public IList<Animal> GetAnimalsByOwnerId(int ownerId)
         {
             var connectionString = this.GetConnection();
