@@ -20,5 +20,11 @@ namespace VetVaxManager.Controllers
             var vaccinationSchedule = _vaccineRepository.GetVaccinationSchedules();
             return View();
         }
+
+        public IActionResult VaccineRecord(int animalId)
+        {
+            var vaccines = _vaccineRepository.GetAllVaccinesByAnimalId(animalId);
+            return View();
+        }
     }
 }
