@@ -6,6 +6,7 @@
         public DateTime DateOfAdministration { get; set; }
         public string Lot { get; set; }
         public string Manufacturer { get; set; }
+        public DateTime DateOfManufacture { get; set; }
         public Animal Animal { get; set; }
         public VaccinationSchedule VaccinationSchedule { get; set; }
     }
