@@ -1,5 +1,7 @@
 using MySql.Data.MySqlClient;
+using System.Configuration;
 using System.Data;
+using VetVaxManager.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,9 @@ var connectionString = builder.Configuration.GetConnectionString("MySQL");
 
 builder.Services.AddScoped<IDbConnection>((sp) =>
   new MySqlConnection(connectionString));
+
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+builder.Services.AddTransient<IAnimalRepository, AnimalRepository>();
 
 var app = builder.Build();
 
