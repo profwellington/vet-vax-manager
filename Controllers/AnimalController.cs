@@ -19,7 +19,7 @@ namespace VetVaxManager.Controllers
         public IActionResult MyAnimals()
         {
             var animals = _animalRepository.GetAnimalsByOwnerId(1);
-            return View();
+            return View(animals);
         }
         public IActionResult Detail(int animalId)
         {
