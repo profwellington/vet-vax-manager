@@ -70,7 +70,7 @@ namespace VetVaxManager.Repository
                     SELECT
                         v.id AS VaccineId,
                         v.data_administracao AS DateOfAdministration,
-                        v.lote AS Lote,
+                        v.lote AS Lot,
                         v.fabricante AS Manufacturer,
                         v.data_fabricacao AS DateOfManufacture,
                         c.id AS VaccinationScheduleId,
