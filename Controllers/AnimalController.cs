@@ -13,6 +13,10 @@ namespace VetVaxManager.Controllers
             _animalRepository = animalRepository;
         }
         public IActionResult Index()
+        {            
+            return View();
+        }
+        public IActionResult MyAnimals()
         {
             var animals = _animalRepository.GetAnimalsByOwnerId(1);
             return View();
