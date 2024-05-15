@@ -34,15 +34,36 @@ namespace VetVaxManager.Repository
                         a.sexo AS Sex,
                         a.raca AS Race,
                         a.peso AS Weight,
-                        a.vivo AS Alive
+                        a.vivo AS Alive,
+                        s.id AS SpecieId,
+                        s.nome AS Name,
+                        p.id AS OwnerId,
+                        p.nome AS Name,
+                        p.sobrenome AS LastName,
+                        p.data_nascimento AS DateOfBirth,
+                        p.sexo AS Sex,
+                        p.cpf AS Cpf,
+                        p.email AS Email,
+                        p.telefone AS Phone
                     FROM 
                         animais a
+                    INNER JOIN 
+                        especies s ON a.id_especie = s.id
+                    INNER JOIN 
+                        proprietarios p ON a.id_proprietario = p.id
                     WHERE 
                         a.id = @AnimalId";
 
-                    var result = connection.Query<Animal>(
+                    var result = connection.Query<Animal, Specie, Owner, Animal>(
                         sql,
-                        new { AnimalId = id }
+                        (animal, specie, owner) =>
+                        {
+                            animal.Specie = specie;
+                            animal.Owner = owner;
+                            return animal;
+                        },
+                        new { AnimalId = id },
+                        splitOn: "SpecieId, OwnerId"
                     ).FirstOrDefault();
 
                     return result;
