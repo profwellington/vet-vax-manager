@@ -23,7 +23,7 @@ namespace VetVaxManager.Controllers
 
         public IActionResult VaccineRecord(int animalId)
         {
-            var vaccines = _vaccineRepository.GetAllVaccinesByAnimalId(animalId);
+            var vaccines = _vaccineRepository.GetAllVaccinesByAnimalId(1);
             return View();
         }
     }
