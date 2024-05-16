@@ -8,6 +8,20 @@
     <h1 class="display-4">Cartilha de Vacinação</h1>
 </div>
 
+<div class="container text-center mt-5 mb-4">
+    <button id="btnCachorro" class="btn btn-primary me-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        Cachorro
+    </button>
+
+    <button id="btnGato" class="btn btn-primary me-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        Gato
+    </button>
+
+    <button id="btnCavalo" class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        Cavalo
+    </button>
+</div>
+
 <div class="accordion" id="accordionCachorro">
     @foreach (var vaccine in Model.Where(s => s.Specie.Name == "Cachorro"))
     {
@@ -31,7 +45,7 @@
     }
 </div>
 
-<div class="accordion" id="accordionGato">
+<div class="accordion d-none" id="accordionGato">
     @foreach (var vaccine in Model.Where(s => s.Specie.Name == "Gato"))
     {
         count++;
@@ -54,7 +68,7 @@
     }
 </div>
 
-<div class="accordion" id="accordionCavalo">
+<div class="accordion d-none" id="accordionCavalo">
     @foreach (var vaccine in Model.Where(s => s.Specie.Name == "Cavalo"))
     {
         count++;
@@ -76,3 +90,36 @@
         </div>
     }
 </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const btnCachorro = document.getElementById("btnCachorro");
+        const btnGato = document.getElementById("btnGato");
+        const btnCavalo = document.getElementById("btnCavalo");
+        const accordionCachorro = document.getElementById("accordionCachorro");
+        const accordionGato = document.getElementById("accordionGato");
+        const accordionCavalo = document.getElementById("accordionCavalo");
+
+        btnCachorro.addEventListener("click", function () {
+            accordionCachorro.classList.remove("d-none");
+            accordionGato.classList.add("d-none");
+            accordionCavalo.classList.add("d-none");
+        });
+
+        btnGato.addEventListener("click", function () {
+            accordionCachorro.classList.add("d-none");
+            accordionGato.classList.remove("d-none");
+            accordionCavalo.classList.add("d-none");
+        });
+
+        btnCavalo.addEventListener("click", function () {
+            accordionCachorro.classList.add("d-none");
+            accordionGato.classList.add("d-none");
+            accordionCavalo.classList.remove("d-none");
+        });
+    });
+</script>
