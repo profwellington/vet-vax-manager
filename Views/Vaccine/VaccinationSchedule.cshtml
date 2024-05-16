@@ -1,8 +1,78 @@
 ﻿@{
     ViewData["Title"] = "Cartilha de Vacinação";
+    @model List<VetVaxManager.Models.VaccinationSchedule>
+    int count = 0;
 }
 
 <div class="text-center">
     <h1 class="display-4">Cartilha de Vacinação</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<div class="accordion" id="accordionCachorro">
+    @foreach (var vaccine in Model.Where(s => s.Specie.Name == "Cachorro"))
+    {
+        count++;
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-@count">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@count" aria-expanded="false" aria-controls="collapse-@count">
+                    @vaccine.Name
+                </button>
+            </h2>
+            <div id="collapse-@count" class="accordion-collapse collapse" aria-labelledby="heading-@count" data-bs-parent="#accordionCachorro">
+                <div class="accordion-body">
+                    <p><b>Descrição: </b>@vaccine.Description</p>
+                    <p><b>Dose: </b>@vaccine.Dose</p>
+                    <p><b>Faixa Etária: </b>@vaccine.AgeGroup</p>
+                    <p><b>Espécie: </b>@vaccine.Specie.Name</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="accordion" id="accordionGato">
+    @foreach (var vaccine in Model.Where(s => s.Specie.Name == "Gato"))
+    {
+        count++;
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-@count">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@count" aria-expanded="false" aria-controls="collapse-@count">
+                    @vaccine.Name
+                </button>
+            </h2>
+            <div id="collapse-@count" class="accordion-collapse collapse" aria-labelledby="heading-@count" data-bs-parent="#accordionGato">
+                <div class="accordion-body">
+                    <p><b>Descrição: </b>@vaccine.Description</p>
+                    <p><b>Dose: </b>@vaccine.Dose</p>
+                    <p><b>Faixa Etária: </b>@vaccine.AgeGroup</p>
+                    <p><b>Espécie: </b>@vaccine.Specie.Name</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="accordion" id="accordionCavalo">
+    @foreach (var vaccine in Model.Where(s => s.Specie.Name == "Cavalo"))
+    {
+        count++;
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-@count">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@count" aria-expanded="false" aria-controls="collapse-@count">
+                    @vaccine.Name
+                </button>
+            </h2>
+            <div id="collapse-@count" class="accordion-collapse collapse" aria-labelledby="heading-@count" data-bs-parent="#accordionCavalo">
+                <div class="accordion-body">
+                    <p><b>Descrição: </b>@vaccine.Description</p>
+                    <p><b>Dose: </b>@vaccine.Dose</p>
+                    <p><b>Faixa Etária: </b>@vaccine.AgeGroup</p>
+                    <p><b>Espécie: </b>@vaccine.Specie.Name</p>
+                </div>
+            </div>
+        </div>
+    }
 </div>

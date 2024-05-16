@@ -18,7 +18,7 @@ namespace VetVaxManager.Controllers
         public IActionResult VaccinationSchedule()
         {
             var vaccinationSchedule = _vaccineRepository.GetVaccinationSchedules();
-            return View();
+            return View(vaccinationSchedule);
         }
 
         public IActionResult VaccineRecord(int animalId)
