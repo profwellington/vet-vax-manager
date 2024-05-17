@@ -16,9 +16,9 @@
             <img src="/img/animals/picture_animal.png" class="rounded-img card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">@animal.Name</h5>
-                <h6 class="text-muted">Espécie: @animal.Specie.Name</h6>
-                <h6 class="text-muted">Raça: @animal.Race</h6>
-                <h6 class="text-muted">Idade: @(DateTime.Today.Year - animal.DateOfBirth.Year) anos</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Espécie: @animal.Specie.Name</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Raça: @animal.Race</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Idade: @(DateTime.Today.Year - animal.DateOfBirth.Year) anos</h6>
                 <a href="#" class="btn btn-primary mt-2">Ver mais</a>
             </div>
         </div>
