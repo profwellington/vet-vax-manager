@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Meus Animais";
+    @model VetVaxManager.ViewModels.AnimalDetailsViewModel
+    var status = Model.Animal.Alive ? "Vivo" : "Morto";
+
+}
+
+<p class="display-6">Dados do animal:</p>
+
+<div class="row my-4">
+    <div class="col">
+        <div class="card text-center rounded-card">
+            <img src="/img/animals/picture_animal.png" class="rounded-img card-img-top" alt="..." style="width: 8rem;">
+            <div class="card-body">
+                <h5 class="card-title">@Model.Animal.Name</h5>
+                <h6 class="text-muted">Sexo: @Model.Animal.Sex</h6>
+                <h6 class="text-muted">Espécie: Definir</h6>
+                <h6 class="text-muted">Raça: @Model.Animal.Race</h6>
+                <h6 class="text-muted">Idade: @(DateTime.Today.Year - Model.Animal.DateOfBirth.Year) anos</h6>
+                <h6 class="text-muted">Peso: @Model.Animal.Weight kg</h6>
+                <h6 class="text-muted">Estado: @status</h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p class="display-6">Agenda:</p>
+
+<p class="display-6">Vacinas:</p>
