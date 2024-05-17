@@ -6,6 +6,7 @@
 
 <div class="text-center">
     <h1 class="display-4">Cartilha de Vacinação</h1>
+    <h4 class="text-muted">Informações detalhadas sobre todas as vacinas disponíveis, categorizadas por espécies animais</h4>
 </div>
 
 <div class="container text-center mt-5 mb-4">
@@ -30,7 +31,8 @@
         <div class="accordion-item">
             <h2 class="accordion-header" id="heading-@count">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@count" aria-expanded="false" aria-controls="collapse-@count">
-                    @vaccine.Name
+                    @vaccine.Name - @vaccine.Dose
+                    <br>@vaccine.AgeGroup
                 </button>
             </h2>
             <div id="collapse-@count" class="accordion-collapse collapse" aria-labelledby="heading-@count" data-bs-parent="#accordionCachorro">
@@ -53,7 +55,8 @@
         <div class="accordion-item">
             <h2 class="accordion-header" id="heading-@count">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@count" aria-expanded="false" aria-controls="collapse-@count">
-                    @vaccine.Name
+                    @vaccine.Name - @vaccine.Dose
+                    <br>@vaccine.AgeGroup
                 </button>
             </h2>
             <div id="collapse-@count" class="accordion-collapse collapse" aria-labelledby="heading-@count" data-bs-parent="#accordionGato">
@@ -76,7 +79,8 @@
         <div class="accordion-item">
             <h2 class="accordion-header" id="heading-@count">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@count" aria-expanded="false" aria-controls="collapse-@count">
-                    @vaccine.Name
+                    @vaccine.Name - @vaccine.Dose
+                    <br>@vaccine.AgeGroup
                 </button>
             </h2>
             <div id="collapse-@count" class="accordion-collapse collapse" aria-labelledby="heading-@count" data-bs-parent="#accordionCavalo">
