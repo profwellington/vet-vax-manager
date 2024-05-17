@@ -5,6 +5,7 @@
 
 <div class="text-center">
     <h1 class="display-4">Meus Animais</h1>
+    <h4 class="text-muted">Veja todos os animais registrados, suas informações detalhadas, agendamentos e cartão de vacinas</h4>
 </div>
 
 <div class="row row-cols-1 row-cols-md-3 g-4 my-4">
@@ -18,7 +19,7 @@
                 <h6 class="text-muted">Espécie: @animal.Specie.Name</h6>
                 <h6 class="text-muted">Raça: @animal.Race</h6>
                 <h6 class="text-muted">Idade: @(DateTime.Today.Year - animal.DateOfBirth.Year) anos</h6>
-                <a href="#" class="btn btn-primary">Ver mais</a>
+                <a href="#" class="btn btn-primary mt-2">Ver mais</a>
             </div>
         </div>
     </div>
