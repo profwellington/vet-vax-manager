@@ -1,29 +1,62 @@
 ﻿@{
-    ViewData["Title"] = "Meus Animais";
+    ViewData["Title"] = "Detalhes do animal";
     @model VetVaxManager.ViewModels.AnimalDetailsViewModel
     var status = Model.Animal.Alive ? "Vivo" : "Morto";
 
 }
 
-<p class="display-6">Dados do animal:</p>
-
-<div class="row my-4">
-    <div class="col">
-        <div class="card text-center rounded-card">
-            <img src="/img/animals/picture_animal.png" class="rounded-img card-img-top" alt="..." style="width: 8rem;">
-            <div class="card-body">
-                <h5 class="card-title">@Model.Animal.Name</h5>
-                <h6 class="text-muted">Sexo: @Model.Animal.Sex</h6>
-                <h6 class="text-muted">Espécie: Definir</h6>
-                <h6 class="text-muted">Raça: @Model.Animal.Race</h6>
-                <h6 class="text-muted">Idade: @(DateTime.Today.Year - Model.Animal.DateOfBirth.Year) anos</h6>
-                <h6 class="text-muted">Peso: @Model.Animal.Weight kg</h6>
-                <h6 class="text-muted">Estado: @status</h6>
+<div class="container my-4">
+    <h4>Dados do animal:</h4>
+    <div class="row">
+        <div class="col">
+            <div class="card text-center rounded-card">
+                <img src="/img/animals/picture_animal.png" class="rounded-img card-img-top" alt="..." style="width: 8rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.Animal.Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted"><b>Sexo:</b> @Model.Animal.Sex | <b>Espécie:</b> Definir | <b>Raça:</b> @Model.Animal.Race</h6>
+                    <h6 class="card-subtitle mb-2 text-muted"><b>Idade</b>: @(DateTime.Today.Year - Model.Animal.DateOfBirth.Year) anos | <b>Peso:</b> @Model.Animal.Weight kg | <b>Estado:</b> @status</h6>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<p class="display-6">Agenda:</p>
+<div class="container my-2">
+    <h4 class="mb-3">Agenda:</h4>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var schedule in Model.Calendar)
+    {
+        @if (@schedule.EventDateTime >= DateTime.Today)
+            {
+                <div class="col">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">@schedule.VaccinationSchedule.Name</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">@schedule.VaccinationSchedule.Dose</h6>
+                            <p class="card-text">Programada para: @schedule.EventDateTime.ToString("dd-MM-yyyy")</p>
+                        </div>
+                    </div>
+                </div>
+            }
+    }
+    </div>
+</div>
 
-<p class="display-6">Vacinas:</p>
+<div class="container my-4">
+    <h4 class="mb-3">Cartão de Vacinas:</h4>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var vaccine in Model.Vaccines)
+    {
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@vaccine.VaccinationSchedule.Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@vaccine.VaccinationSchedule.Dose</h6>
+                    <p class="card-text">Data de Administração: @vaccine.DateOfAdministration.ToString("dd-MM-yyyy")</p>
+                    <a href="#" class="card-link">Ver detalhes</a>
+                </div>
+            </div>
+        </div>
+    }
+    </div>
+</div>
