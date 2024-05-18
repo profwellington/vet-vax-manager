@@ -53,7 +53,7 @@
                     <h5 class="card-title">@vaccine.VaccinationSchedule.Name</h5>
                     <h6 class="card-subtitle mb-2 text-muted">@vaccine.VaccinationSchedule.Dose</h6>
                     <p class="card-text">Data de Administração: @vaccine.DateOfAdministration.ToString("dd-MM-yyyy")</p>
-                    <a href="#" class="card-link">Ver detalhes</a>
+                    <a asp-area="" asp-controller="Vaccine" asp-action="VaccineDetails" asp-route-id="@vaccine.VaccineId" class="card-link">Ver detalhes</a>
                 </div>
             </div>
         </div>
