@@ -114,5 +114,61 @@ namespace VetVaxManager.Repository
                 }
             }
         }
+        public Vaccine GetVaccineById(int id)
+        {
+            var connectionString = this.GetConnection();
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string sql = @"
+                    SELECT
+                        v.id AS VaccineId,
+                        v.data_administracao AS DateOfAdministration,
+                        v.lote AS Lot,
+                        v.fabricante AS Manufacturer,
+                        v.data_fabricacao AS DateOfManufacture,
+                        c.id AS VaccinationScheduleId,
+                        c.nome_vacina AS Name,
+                        c.descricao_vacina AS Description,
+                        c.dose AS Dose,
+                        c.faixa_etaria AS AgeGroup,
+                        a.id AS AnimalId,
+                        a.nome AS Name,
+                        a.data_nascimento AS DateOfBirth,
+                        a.sexo AS Sex,
+                        a.raca AS Race,
+                        a.peso AS Weight,
+                        a.vivo AS Alive
+                    FROM vacinas v
+                    INNER JOIN cartilhas_vacinacao c ON c.id = v.id_cartilha_vacinacao
+                    INNER JOIN animais a ON a.id = v.id_animal
+                    WHERE v.id = @VaccineId";
+
+                    var result = connection.Query<Vaccine, VaccinationSchedule, Animal, Vaccine>(
+                        sql,
+                        (vaccine, vaccinationSchedule, animal) =>
+                        {
+                            vaccine.Animal = animal;
+                            vaccine.VaccinationSchedule = vaccinationSchedule;
+                            return vaccine;
+                        },
+                        new { VaccineId = id },
+                        splitOn: "VaccinationScheduleId, AnimalId"
+                    ).FirstOrDefault();
+
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
     }
 }

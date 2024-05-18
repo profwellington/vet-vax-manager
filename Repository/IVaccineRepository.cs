@@ -6,5 +6,6 @@ namespace VetVaxManager.Repository
     {
         IList<VaccinationSchedule> GetVaccinationSchedules();
         IList<Vaccine> GetAllVaccinesByAnimalId(int animalId);
+        Vaccine GetVaccineById(int id);
     }
 }

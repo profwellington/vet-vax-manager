@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Detalhes da vacina";
+    @model VetVaxManager.Models.Vaccine;
+}
+
+<div class="container my-2">
+    <h4 class="mb-3">Detalhes da vacina:</h4>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col">
+            <div class="card" style="width: 50rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.VaccinationSchedule.Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@Model.VaccinationSchedule.Dose</h6>
+                    <p class="card-text"><b>Data de administração:</b> @Model.DateOfAdministration.ToString("dd-MM-yyyy")</p>
+                    <p class="card-text"><b>Data de fabricação:</b> @Model.DateOfManufacture.ToString("dd-MM-yyyy")</p>
+                    <p class="card-text"><b>Fabricante:</b> @Model.Manufacturer</p>
+                    <p class="card-text"><b>Lote:</b> @Model.Lot</p>
+                    <p class="card-text"><b>Data de administração:</b> @Model.DateOfManufacture.ToString("dd-MM-yyyy")</p>
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
+<div class="container mt-2">
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteVaccineModal">Deletar</button>
+    <a class="btn btn-secondary" asp-area="" asp-controller="Animal" asp-action="Details" asp-route-id="@Model.Animal.AnimalId" role="button">Voltar</a>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteVaccineModal" tabindex="-1" aria-labelledby="deleteVaccineModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteVaccineModalLabel">Deletar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja deletar a vacina do cartão?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-danger">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
