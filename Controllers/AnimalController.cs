@@ -11,10 +11,12 @@ namespace VetVaxManager.Controllers
     {
         IAnimalRepository _animalRepository;
         IVaccineRepository _vaccineRepository;
-        public AnimalController(IAnimalRepository animalRepository, IVaccineRepository vaccineRepository)
+        ICalendarRepository _calendarRepository;
+        public AnimalController(IAnimalRepository animalRepository, IVaccineRepository vaccineRepository, ICalendarRepository calendarRepository)
         {
             _animalRepository = animalRepository;
             _vaccineRepository = vaccineRepository;
+            _calendarRepository = calendarRepository;
         }
         public IActionResult Index()
         {            
@@ -25,13 +27,18 @@ namespace VetVaxManager.Controllers
             var animals = _animalRepository.GetAnimalsByOwnerId(1);
             return View(animals);
         }
-        public IActionResult Details(int animalId)
+        public IActionResult Details(int id)
         {
-            var animal = _animalRepository.GetAnimalById(1);
-            // TODO: Metodo para trazer informacoes de Agendas
-            var vaccines = _vaccineRepository.GetAllVaccinesByAnimalId(1);
+            var animal = _animalRepository.GetAnimalById(id);
+            var schedules = _calendarRepository.GetAllEventsByAnimalId(id);
+            var vaccines = _vaccineRepository.GetAllVaccinesByAnimalId(id);
 
-            AnimalDetailsViewModel animalDetails = null;
+            AnimalDetailsViewModel animalDetails = new AnimalDetailsViewModel
+            {
+                Animal = animal,
+                Calendar = schedules,
+                Vaccines = vaccines
+            };
 
             return View(animalDetails);
         }
