@@ -170,5 +170,28 @@ namespace VetVaxManager.Repository
                 }
             }
         }
+        public int DeleteVaccineById(int id)
+        {
+            var connectionString = this.GetConnection();
+            var count = 0;
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    var query = "DELETE FROM vacinas WHERE id =" + id;
+                    count = connection.Execute(query);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+                return count;
+            }
+        }
     }
 }

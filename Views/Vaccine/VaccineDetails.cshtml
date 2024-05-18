@@ -39,7 +39,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-danger">Confirmar</button>
+                <a class="btn btn-danger" asp-area="" asp-controller="Vaccine" asp-action="DeleteVaccine" asp-route-id="@Model.VaccineId" asp-route-animalId="@Model.Animal.AnimalId" role="button">Confirmar</a>
             </div>
         </div>
     </div>
