@@ -70,5 +70,40 @@ namespace VetVaxManager.Repository
                 }
             }
         }
+        public int NewEvent(Calendar calendarEvent)
+        {
+            var connectionString = this.GetConnection();
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    var query = @"
+                                INSERT INTO agendas(data_hora, tempo_lembrete, id_animal, id_cartilha_vacinacao)
+                                VALUES(@EventDateTime, @ReminderDays, @AnimalId, @VaccinationScheduleId);
+                                SELECT LAST_INSERT_ID();";
+
+                    var parameters = new
+                    {
+                        EventDateTime = calendarEvent.EventDateTime,
+                        ReminderDays = calendarEvent.ReminderDays,
+                        AnimalId = calendarEvent.Animal.AnimalId,
+                        VaccinationScheduleId = calendarEvent.VaccinationSchedule.VaccinationScheduleId
+                    };
+
+                    int id = connection.QuerySingle<int>(query, parameters);
+
+                    return id;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
     }
 }

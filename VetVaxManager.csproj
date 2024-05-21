@@ -16,6 +16,12 @@
   <ItemGroup>
     <Compile Remove="Repository\IOwnerRepository.cs" />
     <Compile Remove="Repository\OwnerRepository.cs" />
+    <Compile Remove="ViewModels\NewEventViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Calendar\Create.cshtml" />
+    <Content Remove="Views\Vaccine\Create.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,7 +6,7 @@
 }
 
 <div class="container my-4">
-    <h4>Dados do animal:</h4>
+    <h4>Dados do animal:</h4>    
     <div class="row">
         <div class="col">
             <div class="card text-center rounded-card">
@@ -23,6 +23,7 @@
 
 <div class="container my-2">
     <h4 class="mb-3">Agenda:</h4>
+    <a class="btn btn-outline-primary mb-2" asp-area="" asp-controller="Calendar" asp-action="NewEvent" asp-route-id="@Model.Animal.AnimalId" role="button">Agendar vacina</a>
     <div class="row row-cols-1 row-cols-md-3 g-4">
     @foreach (var schedule in Model.Calendar)
     {
@@ -44,6 +45,7 @@
 
 <div class="container my-4">
     <h4 class="mb-3">Cartão de Vacinas:</h4>
+    <a class="btn btn-outline-primary mb-2" asp-area="" asp-controller="Vaccine" asp-action="NewVaccine" role="button">Registrar vacina</a>
     <div class="row row-cols-1 row-cols-md-3 g-4">
     @foreach (var vaccine in Model.Vaccines)
     {
