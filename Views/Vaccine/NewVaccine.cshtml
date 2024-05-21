@@ -1,0 +1,43 @@
+﻿@model VetVaxManager.Models.Vaccine
+
+@{
+    ViewData["Title"] = "Registrar vacina";
+}
+
+<div class="container my-2">
+    <h4>Registrar vacina:</h4>
+    <h6 class="text-muted mb-3">Preencha os campos abaixo para registrar uma vacina no cartão de vacinação:</h6>
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="NewVaccine" method="post">
+                <input type="hidden" asp-for="Animal.AnimalId" value="@ViewBag.AnimalId" />
+                <div class="form-group mb-3">
+                    <label for="selectReminder" class="form-label">Selecione a vacina:</label>
+                    <select class="form-select" aria-label="Select Vaccine" id="selectReminder" asp-for="@Model.VaccinationSchedule.VaccinationScheduleId">
+                        @foreach (var vaccine in ViewBag.VaccinationSchedules)
+                        {
+                            <option value="@vaccine.VaccinationScheduleId">@vaccine.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="inputDateAdministration" class="form-label">Data de administração:</label>
+                    <input type="date" class="form-control" id="inputDateAdministration" asp-for="@Model.DateOfAdministration">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="inputLot" class="form-label">Lote:</label>
+                    <input type="text" class="form-control" id="inputLot" asp-for="@Model.Lot">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="inputManufacturer" class="form-label">Fabricante:</label>
+                    <input type="text" class="form-control" id="inputManufacturer" asp-for="@Model.Manufacturer">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="inputDateManufacture" class="form-label">Data de fabricação:</label>
+                    <input type="date" class="form-control" id="inputDateManufacture" asp-for="@Model.DateOfManufacture">
+                </div>
+                <button type="submit" class="btn btn-primary">Registrar vacina</button>
+            </form>
+        </div>
+    </div>
+</div>

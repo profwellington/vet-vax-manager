@@ -1,14 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
+using VetVaxManager.Models;
 using VetVaxManager.Repository;
 
 namespace VetVaxManager.Controllers
 {
     public class VaccineController : Controller
     {
+        IAnimalRepository _animalRepository;
         IVaccineRepository _vaccineRepository;
-        public VaccineController(IVaccineRepository vaccineRepository)
+        ICalendarRepository _calendarRepository;
+        public VaccineController(IAnimalRepository animalRepository, IVaccineRepository vaccineRepository, ICalendarRepository calendarRepository)
         {
+            _animalRepository = animalRepository;
             _vaccineRepository = vaccineRepository;
+            _calendarRepository = calendarRepository;
         }
         public IActionResult Index()
         {
@@ -37,6 +43,33 @@ namespace VetVaxManager.Controllers
             var vaccine = _vaccineRepository.DeleteVaccineById(id);
             var redirectId = animalId;
             return RedirectToAction("Details", "Animal", new {id = redirectId});
+        }
+
+        public ActionResult NewVaccine(int id)
+        {
+            var animal = _animalRepository.GetAnimalById(id);
+            ViewBag.AnimalId = id;
+            ViewBag.VaccinationSchedules = _vaccineRepository.GetVaccinationSchedules()
+                                    .Where(v => v.Specie.SpecieId == animal.Specie.SpecieId)
+                                    .ToList();
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult NewVaccine(Vaccine vaccine)
+        {
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            if (ModelState.IsValid)
+            {
+                vaccine.Animal = _animalRepository.GetAnimalById(vaccine.Animal.AnimalId);
+                vaccine.VaccinationSchedule = _vaccineRepository.GetVaccinationSchedules()
+                                                            .FirstOrDefault(v => v.VaccinationScheduleId == vaccine.VaccinationSchedule.VaccinationScheduleId);
+                var vaccineId = _vaccineRepository.NewVaccine(vaccine);
+                return RedirectToAction("Details", "Animal", new { id = vaccine.Animal.AnimalId });
+            }
+
+            vaccine.Animal = _animalRepository.GetAnimalById(vaccine.Animal.AnimalId);
+            return View(vaccine);
         }
     }
 }

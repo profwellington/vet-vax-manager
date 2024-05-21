@@ -193,5 +193,43 @@ namespace VetVaxManager.Repository
                 return count;
             }
         }
+
+        public int NewVaccine(Vaccine vaccine)
+        {
+            var connectionString = this.GetConnection();
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    var query = @"
+                                INSERT INTO vacinas(data_administracao, lote, fabricante, data_fabricacao, id_animal, id_cartilha_vacinacao)
+                                VALUES(@DataAdministracao, @Lote, @Fabricante, @DataFabricacao, @AnimalId, @VaccinationScheduleId);
+                                SELECT LAST_INSERT_ID();";
+
+                    var parameters = new
+                    {
+                        DataAdministracao = vaccine.DateOfAdministration,
+                        Lote = vaccine.Lot,
+                        Fabricante = vaccine.Manufacturer,
+                        DataFabricacao = vaccine.DateOfManufacture,
+                        AnimalId = vaccine.Animal.AnimalId,
+                        VaccinationScheduleId = vaccine.VaccinationSchedule.VaccinationScheduleId
+                    };
+
+                    int id = connection.QuerySingle<int>(query, parameters);
+
+                    return id;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
     }
 }
