@@ -56,5 +56,14 @@ namespace VetVaxManager.Controllers
             var redirectId = animalId;
             return RedirectToAction("Details", "Animal", new { id = redirectId });
         }
+
+        public IActionResult EditEvent(int id)
+        {
+            var calendarEvent = _calendarRepository.GetCalendarEventById(id);
+            ViewBag.VaccinationSchedules = _vaccineRepository.GetVaccinationSchedules()
+                                    .Where(v => v.Specie.SpecieId == calendarEvent.Animal.Specie.SpecieId)
+                                    .ToList();
+            return View(calendarEvent);
+        }
     }
 }

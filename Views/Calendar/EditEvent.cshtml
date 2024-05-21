@@ -1,0 +1,35 @@
+﻿@model VetVaxManager.Models.Calendar
+
+@{
+    ViewData["Title"] = "Editar evento";
+}
+
+<div class="container my-2">
+    <h4>Editar evento:</h4>
+    <h6 class="text-muted mb-3">Preencha os campos abaixo para editar um lembrete de vacinação:</h6>
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="EditEvent" method="post">
+                <input type="hidden" asp-for="Animal.AnimalId" value="@Model.Animal.AnimalId" />
+                <div class="form-group mb-3">
+                    <label for="inputDate" class="form-label">Data da vacinação:</label>
+                    <input type="date" class="form-control" id="inputDate" asp-for="@Model.EventDateTime">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="inputReminderDays" class="form-label">Lembrar antes (dias):</label>
+                    <input type="number" class="form-control" id="inputReminderDays" min="0" asp-for="@Model.ReminderDays">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="selectReminder" class="form-label">Selecione a vacina:</label>
+                    <select class="form-select" aria-label="Select Vaccine" id="selectReminder" asp-for="@Model.VaccinationSchedule.VaccinationScheduleId">
+                        @foreach (var vaccine in ViewBag.VaccinationSchedules)
+                        {
+                            <option value="@vaccine.VaccinationScheduleId">@vaccine.Name</option>
+                        }
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Editar lembrete</button>
+            </form>
+        </div>
+    </div>
+</div>

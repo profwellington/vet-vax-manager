@@ -130,22 +130,26 @@ namespace VetVaxManager.Repository
                         c.nome_vacina AS Name,
                         c.descricao_vacina AS Description,
                         c.dose AS Dose,
-                        c.faixa_etaria AS AgeGroup
+                        c.faixa_etaria AS AgeGroup,
+                        e.id AS SpecieId,
+                        e.nome AS Name
                     FROM agendas ag
                     INNER JOIN animais an ON an.id = ag.id_animal
                     INNER JOIN cartilhas_vacinacao c ON c.id = ag.id_cartilha_vacinacao
+                    INNER JOIN especies e ON e.id = an.id_especie
                     WHERE ag.id = @CalendarId";
 
-                    var result = connection.Query<Calendar, Animal, VaccinationSchedule, Calendar>(
+                    var result = connection.Query<Calendar, Animal, VaccinationSchedule, Specie, Calendar>(
                         sql,
-                        (calendar, animal, vaccinationSchedule) =>
+                        (calendar, animal, vaccinationSchedule, specie) =>
                         {
                             calendar.Animal = animal;
                             calendar.VaccinationSchedule = vaccinationSchedule;
+                            calendar.Animal.Specie = specie;
                             return calendar;
                         },
                         new { CalendarId = id },
-                        splitOn: "AnimalId, VaccinationScheduleId"
+                        splitOn: "AnimalId, VaccinationScheduleId, SpecieId"
                     ).FirstOrDefault();
 
                     return result;

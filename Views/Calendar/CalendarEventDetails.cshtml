@@ -21,8 +21,9 @@
     </div>
 </div>
 <div class="container mt-2">
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCalendarEventModal">Deletar</button>
-    <a class="btn btn-secondary" asp-area="" asp-controller="Animal" asp-action="Details" asp-route-id="@Model.Animal.AnimalId" role="button">Voltar</a>
+    <a class="btn btn-outline-secondary" asp-area="" asp-controller="Animal" asp-action="Details" asp-route-id="@Model.Animal.AnimalId" role="button">Voltar</a>
+    <a class="btn btn-secondary" asp-area="" asp-controller="Calendar" asp-action="EditEvent" asp-route-id="@Model.CalendarId" role="button">Editar</a>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCalendarEventModal">Deletar</button>    
 </div>
 
 <!-- Modal -->

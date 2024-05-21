@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Content Remove="Views\Calendar\Create.cshtml" />
+    <Content Remove="Views\Calendar\EditCalendarEvent.cshtml" />
     <Content Remove="Views\Vaccine\Create.cshtml" />
   </ItemGroup>
 
