@@ -43,5 +43,11 @@ namespace VetVaxManager.Controllers
 
             return View(calendar);
         }
+
+        public IActionResult CalendarEventDetails(int id)
+        {
+            var calendarEvent = _calendarRepository.GetCalendarEventById(id);
+            return View(calendarEvent);
+        }
     }
 }

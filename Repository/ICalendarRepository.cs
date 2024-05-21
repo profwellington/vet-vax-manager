@@ -6,5 +6,6 @@ namespace VetVaxManager.Repository
     {
         IList<Calendar> GetAllEventsByAnimalId(int animalId);
         int NewEvent(Calendar calendarEvent);
+        Calendar GetCalendarEventById(int id);
     }
 }

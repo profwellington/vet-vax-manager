@@ -105,5 +105,60 @@ namespace VetVaxManager.Repository
                 }
             }
         }
+
+        public Calendar GetCalendarEventById(int id)
+        {
+            var connectionString = this.GetConnection();
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string sql = @"
+                    SELECT
+                        ag.id AS CalendarId,
+                        ag.data_hora AS EventDateTime,
+                        ag.tempo_lembrete AS ReminderDays,
+                        an.id AS AnimalId,
+                        an.nome AS Name,
+                        an.data_nascimento AS DateOfBirth,
+                        an.sexo AS Sex,
+                        an.raca AS Race,
+                        an.peso AS Weight,
+                        an.vivo AS Alive,
+                        c.id AS VaccinationScheduleId,
+                        c.nome_vacina AS Name,
+                        c.descricao_vacina AS Description,
+                        c.dose AS Dose,
+                        c.faixa_etaria AS AgeGroup
+                    FROM agendas ag
+                    INNER JOIN animais an ON an.id = ag.id_animal
+                    INNER JOIN cartilhas_vacinacao c ON c.id = ag.id_cartilha_vacinacao
+                    WHERE ag.id = @CalendarId";
+
+                    var result = connection.Query<Calendar, Animal, VaccinationSchedule, Calendar>(
+                        sql,
+                        (calendar, animal, vaccinationSchedule) =>
+                        {
+                            calendar.Animal = animal;
+                            calendar.VaccinationSchedule = vaccinationSchedule;
+                            return calendar;
+                        },
+                        new { CalendarId = id },
+                        splitOn: "AnimalId, VaccinationScheduleId"
+                    ).FirstOrDefault();
+
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
     }
 }

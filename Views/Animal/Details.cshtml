@@ -37,6 +37,7 @@
                             <h5 class="card-title">@schedule.VaccinationSchedule.Name</h5>
                             <h6 class="card-subtitle mb-2 text-muted">@schedule.VaccinationSchedule.Dose</h6>
                             <p class="card-text">Programada para: @schedule.EventDateTime.ToString("dd-MM-yyyy")</p>
+                            <a asp-area="" asp-controller="Calendar" asp-action="CalendarEventDetails" asp-route-id="@schedule.CalendarId" class="card-link">Ver detalhes</a>
                         </div>
                     </div>
                 </div>

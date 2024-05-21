@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Detalhes do evento";
+    @model VetVaxManager.Models.Calendar;
+
+}
+
+<div class="container my-2">
+    <h4 class="mb-3">Detalhes do evento:</h4>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col">
+            <div class="card" style="width: 50rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.VaccinationSchedule.Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@Model.VaccinationSchedule.Dose</h6>
+                    <p class="card-text"><b>Programada para:</b> @Model.EventDateTime.ToString("dd-MM-yyyy")</p>
+                    <p class="card-text"><b>Lembrar antes (dias):</b> @Model.ReminderDays</p>
+                    <p class="card-text"><b>Faixa etária:</b> @Model.VaccinationSchedule.AgeGroup</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-2">
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCalendarEventModal">Deletar</button>
+    <a class="btn btn-secondary" asp-area="" asp-controller="Animal" asp-action="Details" asp-route-id="@Model.Animal.AnimalId" role="button">Voltar</a>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteCalendarEventModal" tabindex="-1" aria-labelledby="deleteCalendarEventModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteCalendarEventModalLabel">Deletar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja deletar o evento da agenda?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <a class="btn btn-danger" asp-area="" asp-controller="Calendar" asp-action="DeleteCalendarEvent" asp-route-id="@Model.CalendarId" asp-route-animalId="@Model.Animal.AnimalId" role="button">Confirmar</a>
+            </div>
+        </div>
+    </div>
+</div>
