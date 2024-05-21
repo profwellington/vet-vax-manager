@@ -15,6 +15,8 @@
                     <h5 class="card-title">@Model.Animal.Name</h5>
                     <h6 class="card-subtitle mb-2 text-muted"><b>Sexo:</b> @Model.Animal.Sex | <b>Espécie:</b> Definir | <b>Raça:</b> @Model.Animal.Race</h6>
                     <h6 class="card-subtitle mb-2 text-muted"><b>Idade</b>: @(DateTime.Today.Year - Model.Animal.DateOfBirth.Year) anos | <b>Peso:</b> @Model.Animal.Weight kg | <b>Estado:</b> @status</h6>
+                    <a class="btn btn-secondary mt-2 me-2" asp-area="" asp-controller="Animal" asp-action="EditAnimal" asp-route-id="@Model.Animal.AnimalId" role="button">Editar</a>
+                    <button type="button" class="btn btn-danger mt-2" data-bs-toggle="modal" data-bs-target="#deleteAnimalModal">Deletar</button>
                 </div>
             </div>
         </div>
@@ -60,5 +62,24 @@
             </div>
         </div>
     }
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteAnimalModal" tabindex="-1" aria-labelledby="deleteAnimalModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteAnimalModalLabel">Deletar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja deletar o animal?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <a class="btn btn-danger" asp-area="" asp-controller="Animal" asp-action="DeleteAnimal" asp-route-id="@Model.Animal.AnimalId" asp-route-animalId="@Model.Animal.Owner.OwnerId" role="button">Confirmar</a>
+            </div>
+        </div>
     </div>
 </div>

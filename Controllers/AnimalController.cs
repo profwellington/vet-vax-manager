@@ -65,5 +65,12 @@ namespace VetVaxManager.Controllers
 
             return View(animal);
         }
+
+        public IActionResult DeleteAnimal(int id, int ownerId)
+        {
+            var animal = _animalRepository.DeleteAnimalById(id);
+            var redirectId = ownerId;
+            return RedirectToAction("MyAnimals", "Animal", new { id = redirectId });
+        }
     }
 }
