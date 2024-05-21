@@ -1,0 +1,54 @@
+﻿@model VetVaxManager.Models.Animal
+
+@{
+    ViewData["Title"] = "Registrar animal";
+}
+
+<div class="container my-2">
+    <h4>Registrar animal:</h4>
+    <h6 class="text-muted mb-3">Preencha os campos abaixo para registrar um novo animal:</h6>
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="NewAnimal" method="post">
+                <input type="hidden" asp-for="Owner.OwnerId" value="@ViewBag.OwnerId" />
+                <div class="form-group mb-3">
+                    <label for="inputName" class="form-label">Nome:</label>
+                    <input type="text" class="form-control" id="inputName" asp-for="@Model.Name">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="inputDateBirth" class="form-label">Data de nascimento:</label>
+                    <input type="date" class="form-control" id="inputDateBirth" asp-for="@Model.DateOfBirth">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="selectSex" class="form-label">Selecione o sexo:</label>
+                    <select class="form-select" aria-label="Select Sex" id="selectSex" asp-for="@Model.Sex">
+                        <option value="M">Masculino</option>
+                        <option value="F">Feminino</option>
+                    </select>
+                </div>                
+                <div class="form-group mb-3">
+                    <label for="inputRace" class="form-label">Raça:</label>
+                    <input type="text" class="form-control" id="inputRace" asp-for="@Model.Race">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="inputWeight" class="form-label">Peso:</label>
+                    <input type="number" step="0.01" min="0" class="form-control" id="inputWeight" asp-for="@Model.Weight">
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="selectSpecie" class="form-label">Selecione a espécie:</label>
+                    <select class="form-select" aria-label="Select Specie" id="selectSpecie" asp-for="@Model.Specie.SpecieId">
+                        @foreach (var specie in ViewBag.Species)
+                        {
+                            <option value="@specie.SpecieId">@specie.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <input type="hidden" asp-for="@Model.Alive" value = "true" />
+
+                <button type="submit" class="btn btn-primary">Registrar animal</button>
+            </form>
+        </div>
+    </div>
+</div>

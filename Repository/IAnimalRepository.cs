@@ -6,5 +6,7 @@ namespace VetVaxManager.Repository
     {
         Animal GetAnimalById(int id);
         IList<Animal> GetAnimalsByOwnerId(int ownerId);
+        int NewAnimal(Animal animal);
+        IList<Specie> GetAllSpecies();
     }
 }

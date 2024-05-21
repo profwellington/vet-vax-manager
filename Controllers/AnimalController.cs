@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using System.Configuration;
+using System.Reflection.PortableExecutable;
 using VetVaxManager.Models;
 using VetVaxManager.Repository;
 using VetVaxManager.ViewModels;
@@ -41,6 +42,28 @@ namespace VetVaxManager.Controllers
             };
 
             return View(animalDetails);
+        }
+
+        public ActionResult NewAnimal(int id)
+        {
+            var animal = _animalRepository.GetAnimalById(id);
+            ViewBag.OwnerId = id;
+            ViewBag.Species = _animalRepository.GetAllSpecies();
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult NewAnimal(Animal animal)
+        {
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            if (ModelState.IsValid)
+            {
+                animal.Specie = _animalRepository.GetAllSpecies().FirstOrDefault(s => s.SpecieId == animal.Specie.SpecieId);
+                var animalId = _animalRepository.NewAnimal(animal);
+                return RedirectToAction("MyAnimals", "Animal");
+            }
+
+            return View(animal);
         }
     }
 }

@@ -140,5 +140,75 @@ namespace VetVaxManager.Repository
                 }
             }
         }
+
+        public int NewAnimal(Animal animal)
+        {
+            var connectionString = this.GetConnection();
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    var query = @"
+                                INSERT INTO animais(nome, data_nascimento, sexo, raca, peso, vivo, id_proprietario, id_especie)
+                                VALUES(@Name, @DateOfBirth, @Sex, @Race, @Weight, @Alive, @OwnerId, @SpecieId);
+                                SELECT LAST_INSERT_ID();";
+
+                    var parameters = new
+                    {
+                        Name = animal.Name,
+                        DateOfBirth = animal.DateOfBirth,
+                        Sex = animal.Sex,
+                        Race = animal.Race,
+                        Weight = animal.Weight,
+                        Alive = animal.Alive,
+                        OwnerId = animal.Owner.OwnerId,
+                        SpecieId = animal.Specie.SpecieId
+                    };
+
+                    int id = connection.QuerySingle<int>(query, parameters);
+
+                    return id;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        public IList<Specie> GetAllSpecies()
+        {
+            var connectionString = this.GetConnection();
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string sql = @"
+                    SELECT
+                        e.id AS SpecieId,
+                        e.nome AS Name
+                    FROM especies e";
+
+                    var result = connection.Query<Specie>(
+                        sql).ToList();
+
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
     }
 }
