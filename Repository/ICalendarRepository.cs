@@ -8,5 +8,6 @@ namespace VetVaxManager.Repository
         int NewEvent(Calendar calendarEvent);
         Calendar GetCalendarEventById(int id);
         int DeleteCalendarEventById(int id);
+        int UpdateCalendarEvent(Calendar calendarEvent);
     }
 }

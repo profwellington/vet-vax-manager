@@ -65,5 +65,22 @@ namespace VetVaxManager.Controllers
                                     .ToList();
             return View(calendarEvent);
         }
+
+        [HttpPost]
+        public ActionResult EditEvent(Calendar calendar)
+        {
+            calendar.Animal = _animalRepository.GetAnimalById(calendar.Animal.AnimalId);
+            calendar.VaccinationSchedule = _vaccineRepository.GetVaccinationSchedules()
+                                                        .FirstOrDefault(v => v.VaccinationScheduleId == calendar.VaccinationSchedule.VaccinationScheduleId);
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            if (ModelState.IsValid)
+            {
+                var updatedCalendarEvent = _calendarRepository.UpdateCalendarEvent(calendar);
+                return RedirectToAction("Details", "Animal", new { id = calendar.Animal.AnimalId });
+            }
+            calendar.Animal = _animalRepository.GetAnimalById(calendar.Animal.AnimalId);
+
+            return View(calendar);
+        }
     }
 }

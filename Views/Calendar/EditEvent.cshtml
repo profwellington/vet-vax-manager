@@ -11,6 +11,7 @@
         <div class="col-md-4">
             <form asp-action="EditEvent" method="post">
                 <input type="hidden" asp-for="Animal.AnimalId" value="@Model.Animal.AnimalId" />
+                <input type="hidden" asp-for="CalendarId" value="@Model.CalendarId" />
                 <div class="form-group mb-3">
                     <label for="inputDate" class="form-label">Data da vacinação:</label>
                     <input type="date" class="form-control" id="inputDate" asp-for="@Model.EventDateTime">

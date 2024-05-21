@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using MySql.Data.MySqlClient;
 using VetVaxManager.Models;
+using static Dapper.SqlMapper;
 
 namespace VetVaxManager.Repository
 {
@@ -176,6 +177,43 @@ namespace VetVaxManager.Repository
                     connection.Open();
                     var query = "DELETE FROM agendas WHERE id =" + id;
                     count = connection.Execute(query);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+                return count;
+            }
+        }
+
+        public int UpdateCalendarEvent(Calendar calendarEvent)
+        {
+            var connectionString = this.GetConnection();
+            var count = 0;
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    var query = @"
+                                UPDATE agendas
+                                SET data_hora = @EventDateTime,
+                                    tempo_lembrete = @ReminderDays,
+                                    id_cartilha_vacinacao = @VaccinationScheduleId
+                                WHERE id = @CalendarId";
+                    var parameters = new
+                    {
+                        EventDateTime = calendarEvent.EventDateTime,
+                        ReminderDays = calendarEvent.ReminderDays,
+                        VaccinationScheduleId = calendarEvent.VaccinationSchedule.VaccinationScheduleId,
+                        CalendarId = calendarEvent.CalendarId
+                    };
+
+                    count = connection.Execute(query, parameters);
                 }
                 catch (Exception ex)
                 {
