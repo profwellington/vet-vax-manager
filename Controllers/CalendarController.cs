@@ -49,5 +49,12 @@ namespace VetVaxManager.Controllers
             var calendarEvent = _calendarRepository.GetCalendarEventById(id);
             return View(calendarEvent);
         }
+
+        public IActionResult DeleteCalendarEvent(int id, int animalId)
+        {
+            var calendarEvent = _calendarRepository.DeleteCalendarEventById(id);
+            var redirectId = animalId;
+            return RedirectToAction("Details", "Animal", new { id = redirectId });
+        }
     }
 }

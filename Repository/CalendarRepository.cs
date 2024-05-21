@@ -160,5 +160,29 @@ namespace VetVaxManager.Repository
                 }
             }
         }
+
+        public int DeleteCalendarEventById(int id)
+        {
+            var connectionString = this.GetConnection();
+            var count = 0;
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    var query = "DELETE FROM agendas WHERE id =" + id;
+                    count = connection.Execute(query);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+                return count;
+            }
+        }
     }
 }
