@@ -234,5 +234,50 @@ namespace VetVaxManager.Repository
                 return count;
             }
         }
+
+        public int UpdateAnimal(Animal animal)
+        {
+            var connectionString = this.GetConnection();
+            var count = 0;
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    var query = @"
+                                UPDATE animais
+                                SET nome = @Name,
+                                    data_nascimento = @DateOfBirth,
+                                    sexo = @Sex,
+                                    raca = @Race,
+                                    peso = @Weight,
+                                    vivo = @Alive,
+                                    id_especie = @SpecieId
+                                WHERE id = @AnimalId";
+                    var parameters = new
+                    {
+                        Name = animal.Name,
+                        DateOfBirth = animal.DateOfBirth,
+                        Sex = animal.Sex,
+                        Race = animal.Race,
+                        Weight = animal.Weight,
+                        Alive = animal.Alive,
+                        SpecieId = animal.Specie.SpecieId,
+                        AnimalId = animal.AnimalId
+                    };
+
+                    count = connection.Execute(query, parameters);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+                return count;
+            }
+        }
     }
 }

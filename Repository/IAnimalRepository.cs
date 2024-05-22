@@ -9,5 +9,6 @@ namespace VetVaxManager.Repository
         int NewAnimal(Animal animal);
         IList<Specie> GetAllSpecies();
         int DeleteAnimalById(int id);
+        int UpdateAnimal(Animal animal);
     }
 }

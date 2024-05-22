@@ -72,5 +72,26 @@ namespace VetVaxManager.Controllers
             var redirectId = ownerId;
             return RedirectToAction("MyAnimals", "Animal", new { id = redirectId });
         }
+
+        public IActionResult EditAnimal(int id)
+        {
+            var animal = _animalRepository.GetAnimalById(id);
+            ViewBag.Species = _animalRepository.GetAllSpecies();
+            return View(animal);
+        }
+
+        [HttpPost]
+        public ActionResult EditAnimal(Animal animal)
+        {
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            if (ModelState.IsValid)
+            {
+                var updatedAnimal = _animalRepository.UpdateAnimal(animal);
+                return RedirectToAction("MyAnimals", "Animal", new { id = animal.Owner.OwnerId });
+            }
+            animal = _animalRepository.GetAnimalById(animal.AnimalId);
+
+            return View(animal);
+        }
     }
 }
