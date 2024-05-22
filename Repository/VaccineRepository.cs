@@ -140,22 +140,26 @@ namespace VetVaxManager.Repository
                         a.sexo AS Sex,
                         a.raca AS Race,
                         a.peso AS Weight,
-                        a.vivo AS Alive
+                        a.vivo AS Alive,
+                        e.id AS SpecieId,
+                        e.nome AS Name
                     FROM vacinas v
                     INNER JOIN cartilhas_vacinacao c ON c.id = v.id_cartilha_vacinacao
                     INNER JOIN animais a ON a.id = v.id_animal
+                    INNER JOIN especies e ON e.id = a.id_especie
                     WHERE v.id = @VaccineId";
 
-                    var result = connection.Query<Vaccine, VaccinationSchedule, Animal, Vaccine>(
+                    var result = connection.Query<Vaccine, VaccinationSchedule, Animal, Specie, Vaccine>(
                         sql,
-                        (vaccine, vaccinationSchedule, animal) =>
+                        (vaccine, vaccinationSchedule, animal, specie) =>
                         {
                             vaccine.Animal = animal;
                             vaccine.VaccinationSchedule = vaccinationSchedule;
+                            vaccine.Animal.Specie = specie;
                             return vaccine;
                         },
                         new { VaccineId = id },
-                        splitOn: "VaccinationScheduleId, AnimalId"
+                        splitOn: "VaccinationScheduleId, AnimalId, SpecieId"
                     ).FirstOrDefault();
 
                     return result;
@@ -229,6 +233,47 @@ namespace VetVaxManager.Repository
                 {
                     connection.Close();
                 }
+            }
+        }
+
+        public int UpdateVaccine(Vaccine vaccine)
+        {
+            var connectionString = this.GetConnection();
+            var count = 0;
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    var query = @"
+                                UPDATE vacinas
+                                SET data_administracao = @DateOfAdministration,
+                                    lote = @Lot,
+                                    fabricante = @Manufacturer,
+                                    data_fabricacao = @DateOfManufacture,
+                                    id_cartilha_vacinacao = @VaccinationScheduleId
+                                WHERE id = @VaccineId";
+                    var parameters = new
+                    {
+                        DateOfAdministration = vaccine.DateOfAdministration,
+                        Lot = vaccine.Lot,
+                        Manufacturer = vaccine.Manufacturer,
+                        DateOfManufacture = vaccine.DateOfManufacture,
+                        VaccinationScheduleId = vaccine.VaccinationSchedule.VaccinationScheduleId,
+                        VaccineId = vaccine.VaccineId
+                    };
+
+                    count = connection.Execute(query, parameters);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+                return count;
             }
         }
     }

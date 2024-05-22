@@ -9,5 +9,6 @@ namespace VetVaxManager.Repository
         Vaccine GetVaccineById(int id);
         int DeleteVaccineById(int id);
         int NewVaccine(Vaccine vaccine);
+        int UpdateVaccine(Vaccine vaccine);
     }
 }

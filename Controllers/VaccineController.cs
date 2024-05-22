@@ -71,5 +71,31 @@ namespace VetVaxManager.Controllers
             vaccine.Animal = _animalRepository.GetAnimalById(vaccine.Animal.AnimalId);
             return View(vaccine);
         }
+
+        public IActionResult EditVaccine(int id)
+        {
+            var vaccine = _vaccineRepository.GetVaccineById(id);
+            ViewBag.VaccinationSchedules = _vaccineRepository.GetVaccinationSchedules()
+                                    .Where(v => v.Specie.SpecieId == vaccine.Animal.Specie.SpecieId)
+                                    .ToList();
+            return View(vaccine);
+        }
+
+        [HttpPost]
+        public ActionResult EditVaccine(Vaccine vaccine)
+        {
+            vaccine.Animal = _animalRepository.GetAnimalById(vaccine.Animal.AnimalId);
+            vaccine.VaccinationSchedule = _vaccineRepository.GetVaccinationSchedules()
+                                                        .FirstOrDefault(v => v.VaccinationScheduleId == vaccine.VaccinationSchedule.VaccinationScheduleId);
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            if (ModelState.IsValid)
+            {
+                var updatedVaccine = _vaccineRepository.UpdateVaccine(vaccine);
+                return RedirectToAction("Details", "Animal", new { id = vaccine.Animal.AnimalId });
+            }
+            vaccine.Animal = _animalRepository.GetAnimalById(vaccine.Animal.AnimalId);
+
+            return View(vaccine);
+        }
     }
 }
