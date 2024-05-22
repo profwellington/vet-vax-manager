@@ -1,0 +1,89 @@
+﻿@model VetVaxManager.Models.User
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - VetVaxManager</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/VetVaxManager.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://getbootstrap.com/docs/5.1/examples/sign-in/signin.css" />
+    <style>
+        body, html {
+            height: 100%;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .form-signin {
+            width: 100%;
+            max-width: 330px;
+            padding: 15px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body class = "text-center">
+        <main class="form-signin">
+            <form asp-action="Register" method="post">
+                <h1 class="h3 mb-3 fw-normal">Cadastre-se</h1>
+
+                <div class="form-floating mb-1">
+                    <input type="text" class="form-control" id="floatingName" placeholder="Digite seu nome" asp-for="@Model.Owner.Name">
+                    <label for="floatingName">Nome</label>
+                </div>
+                <div class="form-floating mb-1">
+                    <input type="text" class="form-control" id="floatingLastname" placeholder="Digite seu sobrenome" asp-for="@Model.Owner.LastName">
+                    <label for="floatingLastname">Sobrenome</label>
+                </div>
+                <div class="form-floating mb-1">
+                    <input type="email" class="form-control" id="floatingInput" placeholder="email@email.com" asp-for="@Model.Email">
+                    <label for="floatingInput">Endereço de e-mail</label>
+                </div>
+                <div class="form-floating mb-1">
+                    <input type="date" class="form-control" id="floatingBirth" asp-for="@Model.Owner.DateOfBirth">
+                    <label for="floatingBirth">Data de nascimento</label>
+                </div>
+                <div class="form-floating mb-1">                    
+                    <select class="form-select" aria-label="Select Sex" id="floatingSex" asp-for="@Model.Owner.Sex">
+                        <option value="M">Masculino</option>
+                        <option value="F">Feminino</option>
+                    </select>
+                    <label for="floatingSex" class="form-label">Selecione o sexo:</label>
+                </div>
+                <div class="form-floating mb-1">
+                    <input type="text" class="form-control" id="floatingCpf" placeholder="Digite seu CPF" asp-for="@Model.Owner.Cpf">
+                    <label for="floatingCpf">CPF</label>
+                </div>
+                <div class="form-floating mb-1">
+                    <input type="text" class="form-control" id="floatingPhone" placeholder="Digite seu telefone" asp-for="@Model.Owner.Phone">
+                    <label for="floatingPhone">Telefone</label>
+                </div>
+                <div class="form-floating mb-1">
+                    <input type="password" class="form-control" id="floatingPassword" placeholder="Senha" asp-for="@Model.Password">
+                    <label for="floatingPassword">Senha</label>
+                </div>
+
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
+                <p class="mt-5 mb-3 text-muted">&copy; 2024</p>
+            </form>
+        </main>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>

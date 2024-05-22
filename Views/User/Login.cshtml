@@ -1,0 +1,49 @@
+﻿@model VetVaxManager.Models.User
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - VetVaxManager</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/VetVaxManager.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://getbootstrap.com/docs/5.1/examples/sign-in/signin.css" />
+</head>
+<body>
+    <div class="container text-center">
+        <main class="form-signin">
+            <form>
+                <h1 class="h3 mb-3 fw-normal">Realize seu login</h1>
+
+                <div class="form-floating mb-1">
+                    <input type="email" class="form-control" id="floatingInput" placeholder="email@email.com">
+                    <label for="floatingInput">Endereço de e-mail</label>
+                </div>
+                <div class="form-floating mb-1">
+                    <input type="password" class="form-control" id="floatingPassword" placeholder="Senha">
+                    <label for="floatingPassword">Senha</label>
+                </div>
+
+                <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" value="remember-me"> Lembrar-me
+                    </label>
+                </div>
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+                <p class="mt-5 mb-3 text-muted">&copy; 2024</p>
+            </form>
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>
