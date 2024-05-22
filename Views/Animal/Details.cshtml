@@ -13,7 +13,7 @@
                 <img src="/img/animals/picture_animal.png" class="rounded-img card-img-top" alt="..." style="width: 8rem;">
                 <div class="card-body">
                     <h5 class="card-title">@Model.Animal.Name</h5>
-                    <h6 class="card-subtitle mb-2 text-muted"><b>Sexo:</b> @Model.Animal.Sex | <b>Espécie:</b> Definir | <b>Raça:</b> @Model.Animal.Race</h6>
+                    <h6 class="card-subtitle mb-2 text-muted"><b>Sexo:</b> @Model.Animal.Sex | <b>Espécie:</b> @Model.Animal.Specie.Name | <b>Raça:</b> @Model.Animal.Race</h6>
                     <h6 class="card-subtitle mb-2 text-muted"><b>Idade</b>: @(DateTime.Today.Year - Model.Animal.DateOfBirth.Year) anos | <b>Peso:</b> @Model.Animal.Weight kg | <b>Estado:</b> @status</h6>
                     <a class="btn btn-secondary mt-2 me-2" asp-area="" asp-controller="Animal" asp-action="EditAnimal" asp-route-id="@Model.Animal.AnimalId" role="button">Editar</a>
                     <button type="button" class="btn btn-danger mt-2" data-bs-toggle="modal" data-bs-target="#deleteAnimalModal">Deletar</button>
