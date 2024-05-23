@@ -58,7 +58,7 @@ namespace VetVaxManager.Controllers
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity), authProperties);
 
-                return RedirectToAction("MyAnimals", "Animal", new { id = user.Owner.OwnerId });
+                return RedirectToAction("MyAnimals", "Animal");
             }
 
             ModelState.AddModelError(string.Empty, "Email ou senha inválidos");
