@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using VetVaxManager.Models;
 using VetVaxManager.Repository;
 using VetVaxManager.ViewModels;
 
 namespace VetVaxManager.Controllers
 {
+    [Authorize]
     public class CalendarController : Controller
     {
         IAnimalRepository _animalRepository;

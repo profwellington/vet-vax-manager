@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using VetVaxManager.Models;
 using VetVaxManager.Repository;
 
 namespace VetVaxManager.Controllers
 {
+    [Authorize]
     public class VaccineController : Controller
     {
         IAnimalRepository _animalRepository;
