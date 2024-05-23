@@ -14,8 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Repository\IOwnerRepository.cs" />
-    <Compile Remove="Repository\OwnerRepository.cs" />
     <Compile Remove="ViewModels\NewEventViewModel.cs" />
   </ItemGroup>
 

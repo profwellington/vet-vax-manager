@@ -4,6 +4,7 @@ namespace VetVaxManager.Repository
 {
     public interface IOwnerRepository
     {
-        IList<Animal> GetAnimalsByOwnerId(int id);
+        Owner GetOwnerById(int ownerId);
+        int UpdateOwner(Owner owner);
     }
 }

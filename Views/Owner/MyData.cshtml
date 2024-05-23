@@ -1,0 +1,50 @@
+﻿@model VetVaxManager.Models.Owner
+
+@{
+    ViewData["Title"] = "Alterar dados";
+}
+
+<div class="container my-2">
+    <h4>Alterar dados:</h4>
+    <h6 class="text-muted mb-3">Preencha os campos abaixo para editar suas informações:</h6>
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="MyData" method="post">
+                <input type="hidden" asp-for="OwnerId" value="@Model.OwnerId" />
+                <div class="form-group mb-3">
+                    <label for="inputName" class="form-label">Nome:</label>
+                    <input type="text" class="form-control" id="inputName" asp-for="@Model.Name">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="inputLastname" class="form-label">Sobrenome:</label>
+                    <input type="text" class="form-control" id="inputLastname" asp-for="@Model.LastName">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="inputDateBirth" class="form-label">Data de nascimento:</label>
+                    <input type="date" class="form-control" id="inputDateBirth" asp-for="@Model.DateOfBirth">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="selectSex" class="form-label">Selecione o sexo:</label>
+                    <select class="form-select" aria-label="Select Sex" id="selectSex" asp-for="@Model.Sex">
+                        <option value="M">Masculino</option>
+                        <option value="F">Feminino</option>
+                    </select>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="inputCpf" class="form-label">CPF:</label>
+                    <input type="text" class="form-control" id="inputCpf" asp-for="@Model.Cpf">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="inputEmail" class="form-label">E-mail:</label>
+                    <input type="email" class="form-control" id="inputEmail" asp-for="@Model.Email">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="inputPhone" class="form-label">Telefone:</label>
+                    <input type="text" class="form-control" id="inputPhone" asp-for="@Model.Phone">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Alterar dados</button>
+            </form>
+        </div>
+    </div>
+</div>

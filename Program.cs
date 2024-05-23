@@ -18,6 +18,7 @@ builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 builder.Services.AddTransient<IAnimalRepository, AnimalRepository>();
 builder.Services.AddTransient<IVaccineRepository, VaccineRepository>();
 builder.Services.AddTransient<ICalendarRepository, CalendarRepository>();
+builder.Services.AddTransient<IOwnerRepository, OwnerRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 
 // Configuração da autenticação e cookies
