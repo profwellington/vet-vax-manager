@@ -19,23 +19,18 @@
 <body>
     <div class="container text-center">
         <main class="form-signin">
-            <form>
+            <form asp-action="Login" method="post">
                 <h1 class="h3 mb-3 fw-normal">Realize seu login</h1>
 
                 <div class="form-floating mb-1">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="email@email.com">
+                    <input type="email" class="form-control" id="floatingInput" placeholder="email@email.com" asp-for="@Model.Email">
                     <label for="floatingInput">Endereço de e-mail</label>
                 </div>
                 <div class="form-floating mb-1">
-                    <input type="password" class="form-control" id="floatingPassword" placeholder="Senha">
+                    <input type="password" class="form-control" id="floatingPassword" placeholder="Senha" asp-for="@Model.Password">
                     <label for="floatingPassword">Senha</label>
                 </div>
 
-                <div class="checkbox mb-3">
-                    <label>
-                        <input type="checkbox" value="remember-me"> Lembrar-me
-                    </label>
-                </div>
                 <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
                 <p class="mt-5 mb-3 text-muted">&copy; 2024</p>
             </form>
