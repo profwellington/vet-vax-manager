@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using MySql.Data.MySqlClient;
 using System.Configuration;
 using System.Data;
@@ -19,6 +20,22 @@ builder.Services.AddTransient<IVaccineRepository, VaccineRepository>();
 builder.Services.AddTransient<ICalendarRepository, CalendarRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 
+// Configuração da autenticação e cookies
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/User/Login"; // Caminho para a página de login
+        options.LogoutPath = "/User/Logout"; // Caminho para a página de logout
+    });
+
+// Habilitar sessões
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -34,7 +51,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+// Habilitar autenticação e sessões
+app.UseAuthentication();
 app.UseAuthorization();
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
