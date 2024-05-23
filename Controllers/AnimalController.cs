@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using System.Configuration;
 using System.Reflection.PortableExecutable;
@@ -8,6 +9,7 @@ using VetVaxManager.ViewModels;
 
 namespace VetVaxManager.Controllers
 {
+    [Authorize]
     public class AnimalController : Controller
     {
         IAnimalRepository _animalRepository;
@@ -25,7 +27,9 @@ namespace VetVaxManager.Controllers
         }
         public IActionResult MyAnimals()
         {
-            var animals = _animalRepository.GetAnimalsByOwnerId(1);
+            var ownerIdClaim = User.Claims.FirstOrDefault(c => c.Type == "OwnerId");
+            int ownerId = int.Parse(ownerIdClaim.Value);
+            var animals = _animalRepository.GetAnimalsByOwnerId(ownerId);
             return View(animals);
         }
         public IActionResult Details(int id)
