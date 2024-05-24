@@ -35,20 +35,20 @@ namespace VetVaxManager.Repository
                         DateOfBirth = user.Owner.DateOfBirth,
                         Sex = user.Owner.Sex,
                         Cpf = user.Owner.Cpf,
-                        Email = user.Email,
+                        Email = user.Owner.Email,
                         Phone = user.Owner.Phone
                     };
 
                     user.Owner.OwnerId = connection.QuerySingle<int>(queryOwner, parametersOwner);
 
                     var queryUser = @"
-                                INSERT INTO usuarios(email, senha, id_proprietario)
-                                VALUES(@Email, @Password, @OwnerId);
+                                INSERT INTO usuarios(username, senha, id_proprietario)
+                                VALUES(@Username, @Password, @OwnerId);
                                 SELECT LAST_INSERT_ID();";
 
                     var parametersUser = new
                     {
-                        Email = user.Email,
+                        Username = user.Username,
                         Password = user.Password,
                         OwnerId = user.Owner.OwnerId,
                     };
@@ -68,7 +68,7 @@ namespace VetVaxManager.Repository
             }
         }
 
-        public User GetByEmail(string email)
+        public User GetByUsername(string username)
         {
             var connectionString = this.GetConnection();
             using (var connection = new MySqlConnection(connectionString))
@@ -79,7 +79,7 @@ namespace VetVaxManager.Repository
                     string sql = @"
                     SELECT
                         u.id AS UserId,
-                        u.email AS Email,
+                        u.username AS Username,
                         u.senha AS Password,
                         p.id AS OwnerId,
                         p.nome AS Name,
@@ -90,7 +90,7 @@ namespace VetVaxManager.Repository
                         p.telefone AS Phone
                     FROM usuarios u
                     INNER JOIN proprietarios p ON p.id = u.id_proprietario
-                    WHERE u.email = @Email";
+                    WHERE u.username = @Username";
 
                     var result = connection.Query<User, Owner, User>(
                         sql,
@@ -99,7 +99,7 @@ namespace VetVaxManager.Repository
                             user.Owner = owner;
                             return user;
                         },
-                        new { Email = email },
+                        new { Username = username },
                         splitOn: "OwnerId"
                     ).SingleOrDefault();
 

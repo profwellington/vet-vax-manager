@@ -49,8 +49,12 @@
                     <label for="floatingLastname">Sobrenome</label>
                 </div>
                 <div class="form-floating mb-1">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="email@email.com" asp-for="@Model.Email">
-                    <label for="floatingInput">Endereço de e-mail</label>
+                    <input type="text" class="form-control" id="floatingInput" placeholder="Digite o nome de usuário" asp-for="@Model.Username">
+                    <label for="floatingInput">Usuário</label>
+                </div>
+                <div class="form-floating mb-1">
+                    <input type="text" class="form-control" id="floatingEmail" placeholder="Digite o endereço de e-mail" asp-for="@Model.Owner.Email">
+                    <label for="floatingEmail">E-mail</label>
                 </div>
                 <div class="form-floating mb-1">
                     <input type="date" class="form-control" id="floatingBirth" asp-for="@Model.Owner.DateOfBirth">

@@ -40,15 +40,15 @@ namespace VetVaxManager.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string email, string password)
+        public async Task<IActionResult> Login(string username, string password)
         {
-            var user = _userRepository.GetByEmail(email);
+            var user = _userRepository.GetByUsername(username);
             if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.Owner.Name),
-                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim("Username", user.Username),
                     new Claim("OwnerId", user.Owner.OwnerId.ToString())
                 };
 
@@ -61,7 +61,7 @@ namespace VetVaxManager.Controllers
                 return RedirectToAction("MyAnimals", "Animal");
             }
 
-            ModelState.AddModelError(string.Empty, "Email ou senha inválidos");
+            ModelState.AddModelError(string.Empty, "Usuário ou senha inválidos");
             return View();
         }
 
