@@ -24,7 +24,7 @@
                     <select class="form-select" aria-label="Select Vaccine" id="selectReminder" asp-for="@Model.VaccinationSchedule.VaccinationScheduleId">
                         @foreach (var vaccine in ViewBag.VaccinationSchedules)
                         {
-                            <option value="@vaccine.VaccinationScheduleId">@vaccine.Name</option>
+                            <option value="@vaccine.VaccinationScheduleId">@vaccine.Name - @vaccine.Dose</option>
                         }
                     </select>
                 </div>
