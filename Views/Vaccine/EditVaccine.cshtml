@@ -38,6 +38,7 @@
                     <input type="date" class="form-control" id="inputDateManufacture" asp-for="@Model.DateOfManufacture">
                 </div>
                 <button type="submit" class="btn btn-primary">Editar vacina</button>
+                <a class="btn btn-outline-secondary" asp-area="" asp-controller="Vaccine" asp-action="VaccineDetails" asp-route-id="@Model.VaccineId" role="button">Voltar</a>
             </form>
         </div>
     </div>
