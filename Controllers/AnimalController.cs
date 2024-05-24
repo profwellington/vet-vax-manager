@@ -51,7 +51,8 @@ namespace VetVaxManager.Controllers
         public ActionResult NewAnimal(int id)
         {
             var animal = _animalRepository.GetAnimalById(id);
-            ViewBag.OwnerId = id;
+            var ownerIdClaim = User.Claims.FirstOrDefault(c => c.Type == "OwnerId");
+            ViewBag.OwnerId = int.Parse(ownerIdClaim.Value);
             ViewBag.Species = _animalRepository.GetAllSpecies();
             return View();
         }
@@ -70,11 +71,10 @@ namespace VetVaxManager.Controllers
             return View(animal);
         }
 
-        public IActionResult DeleteAnimal(int id, int ownerId)
+        public IActionResult DeleteAnimal(int id)
         {
             var animal = _animalRepository.DeleteAnimalById(id);
-            var redirectId = ownerId;
-            return RedirectToAction("MyAnimals", "Animal", new { id = redirectId });
+            return RedirectToAction("MyAnimals", "Animal");
         }
 
         public IActionResult EditAnimal(int id)
@@ -91,7 +91,7 @@ namespace VetVaxManager.Controllers
             if (ModelState.IsValid)
             {
                 var updatedAnimal = _animalRepository.UpdateAnimal(animal);
-                return RedirectToAction("MyAnimals", "Animal", new { id = animal.Owner.OwnerId });
+                return RedirectToAction("MyAnimals", "Animal");
             }
             animal = _animalRepository.GetAnimalById(animal.AnimalId);
 
