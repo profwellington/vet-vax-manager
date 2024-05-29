@@ -214,14 +214,23 @@ namespace VetVaxManager.Repository
         public int DeleteAnimalById(int id)
         {
             var connectionString = this.GetConnection();
-            var count = 0;
+            var countAnimals = 0;
+            var countVaccines = 0;
+            var countSchedule = 0;
             using (var connection = new MySqlConnection(connectionString))
             {
                 try
                 {
                     connection.Open();
-                    var query = "DELETE FROM animais WHERE id =" + id;
-                    count = connection.Execute(query);
+
+                    var queryVaccine = "DELETE FROM vacinas WHERE id_animal=" + id;
+                    countVaccines = connection.Execute(queryVaccine);
+
+                    var querySchedule = "DELETE FROM agendas WHERE id_animal=" + id;
+                    countSchedule = connection.Execute(querySchedule);
+
+                    var queryAnimals = "DELETE FROM animais WHERE id =" + id;
+                    countAnimals = connection.Execute(queryAnimals);                    
                 }
                 catch (Exception ex)
                 {
@@ -231,7 +240,7 @@ namespace VetVaxManager.Repository
                 {
                     connection.Close();
                 }
-                return count;
+                return countAnimals;
             }
         }
 
