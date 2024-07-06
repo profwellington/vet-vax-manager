@@ -1,31 +1,22 @@
 ﻿using Dapper;
-using MySql.Data.MySqlClient;
 using VetVaxManager.Models;
-using static Dapper.SqlMapper;
 
-namespace VetVaxManager.Repository
+namespace VetVaxManager.Repository;
+
+public sealed class CalendarRepository : BaseRepository, ICalendarRepository
 {
-    public class CalendarRepository : ICalendarRepository
+    public CalendarRepository(IConfiguration configuration) : base(configuration)
     {
-        IConfiguration _configuration;
-        public CalendarRepository(IConfiguration configuration)
+    }
+
+    public IList<Calendar> GetAllEventsByAnimalId(int animalId)
+    {
+        using (var connection = CreateConnection())
         {
-            _configuration = configuration;
-        }
-        public string GetConnection()
-        {
-            var connection = _configuration.GetSection("ConnectionStrings").GetSection("MySQLConnection").Value;
-            return connection;
-        }
-        public IList<Calendar> GetAllEventsByAnimalId(int animalId)
-        {
-            var connectionString = this.GetConnection();
-            using (var connection = new MySqlConnection(connectionString))
+            try
             {
-                try
-                {
-                    connection.Open();
-                    string sql = @"
+                connection.Open();
+                string sql = @"
                     SELECT
                         ag.id AS CalendarId,
                         ag.data_hora AS EventDateTime,
@@ -47,75 +38,66 @@ namespace VetVaxManager.Repository
                     INNER JOIN cartilhas_vacinacao c ON c.id = ag.id_cartilha_vacinacao
                     WHERE ag.id_animal = @AnimalId";
 
-                    var result = connection.Query<Calendar, Animal, VaccinationSchedule, Calendar>(
-                        sql,
-                        (calendar, animal, vaccinationSchedule) =>
-                        {
-                            calendar.Animal = animal;
-                            calendar.VaccinationSchedule = vaccinationSchedule;
-                            return calendar;
-                        },
-                        new { AnimalId = animalId },
-                        splitOn: "AnimalId, VaccinationScheduleId"                        
-                    ).ToList();
-
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-                finally
-                {
-                    connection.Close();
-                }
-            }
-        }
-        public int NewEvent(Calendar calendarEvent)
-        {
-            var connectionString = this.GetConnection();
-            using (var connection = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-                    var query = @"
-                                INSERT INTO agendas(data_hora, tempo_lembrete, id_animal, id_cartilha_vacinacao)
-                                VALUES(@EventDateTime, @ReminderDays, @AnimalId, @VaccinationScheduleId);
-                                SELECT LAST_INSERT_ID();";
-
-                    var parameters = new
+                var result = connection.Query<Calendar, Animal, VaccinationSchedule, Calendar>(
+                    sql,
+                    (calendar, animal, vaccinationSchedule) =>
                     {
-                        EventDateTime = calendarEvent.EventDateTime,
-                        ReminderDays = calendarEvent.ReminderDays,
-                        AnimalId = calendarEvent.Animal.AnimalId,
-                        VaccinationScheduleId = calendarEvent.VaccinationSchedule.VaccinationScheduleId
-                    };
+                        calendar.Animal = animal;
+                        calendar.VaccinationSchedule = vaccinationSchedule;
+                        return calendar;
+                    },
+                    new { AnimalId = animalId },
+                    splitOn: "AnimalId, VaccinationScheduleId"
+                ).ToList();
 
-                    int id = connection.QuerySingle<int>(query, parameters);
-
-                    return id;
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-                finally
-                {
-                    connection.Close();
-                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
+    }
 
-        public Calendar GetCalendarEventById(int id)
+    public int NewEvent(Calendar calendarEvent)
+    {
+        using (var connection = CreateConnection())
         {
-            var connectionString = this.GetConnection();
-            using (var connection = new MySqlConnection(connectionString))
+            try
             {
-                try
+                connection.Open();
+                var query = @"
+                                INSERT INTO agendas(data_hora, tempo_lembrete, id_animal, id_cartilha_vacinacao)
+                                VALUES(@EventDateTime, @ReminderDays, @AnimalId, @VaccinationScheduleId)
+                                RETURNING id;";
+
+                var parameters = new
                 {
-                    connection.Open();
-                    string sql = @"
+                    EventDateTime = calendarEvent.EventDateTime,
+                    ReminderDays = calendarEvent.ReminderDays,
+                    AnimalId = calendarEvent.Animal.AnimalId,
+                    VaccinationScheduleId = calendarEvent.VaccinationSchedule.VaccinationScheduleId
+                };
+
+                int id = connection.QuerySingle<int>(query, parameters);
+
+                return id;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+    }
+
+    public Calendar GetCalendarEventById(int id)
+    {
+        using (var connection = CreateConnection())
+        {
+            try
+            {
+                connection.Open();
+                string sql = @"
                     SELECT
                         ag.id AS CalendarId,
                         ag.data_hora AS EventDateTime,
@@ -140,90 +122,73 @@ namespace VetVaxManager.Repository
                     INNER JOIN especies e ON e.id = an.id_especie
                     WHERE ag.id = @CalendarId";
 
-                    var result = connection.Query<Calendar, Animal, VaccinationSchedule, Specie, Calendar>(
-                        sql,
-                        (calendar, animal, vaccinationSchedule, specie) =>
-                        {
-                            calendar.Animal = animal;
-                            calendar.VaccinationSchedule = vaccinationSchedule;
-                            calendar.Animal.Specie = specie;
-                            return calendar;
-                        },
-                        new { CalendarId = id },
-                        splitOn: "AnimalId, VaccinationScheduleId, SpecieId"
-                    ).FirstOrDefault();
+                var result = connection.Query<Calendar, Animal, VaccinationSchedule, Specie, Calendar>(
+                    sql,
+                    (calendar, animal, vaccinationSchedule, specie) =>
+                    {
+                        calendar.Animal = animal;
+                        calendar.VaccinationSchedule = vaccinationSchedule;
+                        calendar.Animal.Specie = specie;
+                        return calendar;
+                    },
+                    new { CalendarId = id },
+                    splitOn: "AnimalId, VaccinationScheduleId, SpecieId"
+                ).FirstOrDefault();
 
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-                finally
-                {
-                    connection.Close();
-                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
+    }
 
-        public int DeleteCalendarEventById(int id)
+    public int DeleteCalendarEventById(int id)
+    {
+        using (var connection = CreateConnection())
         {
-            var connectionString = this.GetConnection();
-            var count = 0;
-            using (var connection = new MySqlConnection(connectionString))
+            try
             {
-                try
-                {
-                    connection.Open();
-                    var query = "DELETE FROM agendas WHERE id =" + id;
-                    count = connection.Execute(query);
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-                finally
-                {
-                    connection.Close();
-                }
+                connection.Open();
+                var query = "DELETE FROM agendas WHERE id = @Id";
+                int count = connection.Execute(query, new { Id = id });
                 return count;
             }
-        }
-
-        public int UpdateCalendarEvent(Calendar calendarEvent)
-        {
-            var connectionString = this.GetConnection();
-            var count = 0;
-            using (var connection = new MySqlConnection(connectionString))
+            catch (Exception ex)
             {
-                try
-                {
-                    connection.Open();
-                    var query = @"
+                throw ex;
+            }
+        }
+    }
+
+    public int UpdateCalendarEvent(Calendar calendarEvent)
+    {
+        using (var connection = CreateConnection())
+        {
+            try
+            {
+                connection.Open();
+                var query = @"
                                 UPDATE agendas
                                 SET data_hora = @EventDateTime,
                                     tempo_lembrete = @ReminderDays,
                                     id_cartilha_vacinacao = @VaccinationScheduleId
                                 WHERE id = @CalendarId";
-                    var parameters = new
-                    {
-                        EventDateTime = calendarEvent.EventDateTime,
-                        ReminderDays = calendarEvent.ReminderDays,
-                        VaccinationScheduleId = calendarEvent.VaccinationSchedule.VaccinationScheduleId,
-                        CalendarId = calendarEvent.CalendarId
-                    };
+                var parameters = new
+                {
+                    EventDateTime = calendarEvent.EventDateTime,
+                    ReminderDays = calendarEvent.ReminderDays,
+                    VaccinationScheduleId = calendarEvent.VaccinationSchedule.VaccinationScheduleId,
+                    CalendarId = calendarEvent.CalendarId
+                };
 
-                    count = connection.Execute(query, parameters);
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-                finally
-                {
-                    connection.Close();
-                }
+                int count = connection.Execute(query, parameters);
                 return count;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

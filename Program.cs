@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
-using MySql.Data.MySqlClient;
-using System.Configuration;
 using System.Data;
 using VetVaxManager.Repository;
 
@@ -9,10 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var connectionString = builder.Configuration.GetConnectionString("MySQL");
+var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
 
-builder.Services.AddScoped<IDbConnection>((sp) =>
-  new MySqlConnection(connectionString));
+builder.Services.AddScoped<IDbConnection>((sp) => new Npgsql.NpgsqlConnection(connectionString));
 
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 builder.Services.AddTransient<IAnimalRepository, AnimalRepository>();

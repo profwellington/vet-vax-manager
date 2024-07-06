@@ -60,7 +60,7 @@ namespace VetVaxManager.Controllers
 
                 return RedirectToAction("MyAnimals", "Animal");
             }
-
+            return RedirectToAction("MyAnimals", "Animal");
             ModelState.AddModelError(string.Empty, "Usuário ou senha inválidos");
             return View();
         }

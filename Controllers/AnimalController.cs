@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MySql.Data.MySqlClient;
-using System.Configuration;
-using System.Reflection.PortableExecutable;
 using VetVaxManager.Models;
 using VetVaxManager.Repository;
 using VetVaxManager.ViewModels;

@@ -1,32 +1,22 @@
 ﻿using Dapper;
-using MySql.Data.MySqlClient;
-using MySqlX.XDevAPI.Common;
 using VetVaxManager.Models;
 
-namespace VetVaxManager.Repository
-{
-    public class AnimalRepository : IAnimalRepository
-    {
-        IConfiguration _configuration;
-        public AnimalRepository(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-        public string GetConnection()
-        {
-            var connection = _configuration.GetSection("ConnectionStrings").GetSection("MySQLConnection").Value;
-            return connection;
-        }
-        public Animal GetAnimalById(int id)
-        {
-            var connectionString = this.GetConnection();
+namespace VetVaxManager.Repository;
 
-            using (var connection = new MySqlConnection(connectionString))
+public sealed class AnimalRepository : BaseRepository, IAnimalRepository
+{
+    public AnimalRepository(IConfiguration configuration) : base(configuration)
+    {
+    }
+
+    public Animal GetAnimalById(int id)
+    {
+        using (var connection = CreateConnection())
+        {
+            try
             {
-                try
-                {
-                    connection.Open();
-                    string sql = @"
+                connection.Open();
+                string sql = @"
                     SELECT 
                         a.id AS AnimalId,
                         a.nome AS Name,
@@ -54,41 +44,35 @@ namespace VetVaxManager.Repository
                     WHERE 
                         a.id = @AnimalId";
 
-                    var result = connection.Query<Animal, Specie, Owner, Animal>(
-                        sql,
-                        (animal, specie, owner) =>
-                        {
-                            animal.Specie = specie;
-                            animal.Owner = owner;
-                            return animal;
-                        },
-                        new { AnimalId = id },
-                        splitOn: "SpecieId, OwnerId"
-                    ).FirstOrDefault();
+                var result = connection.Query<Animal, Specie, Owner, Animal>(
+                    sql,
+                    (animal, specie, owner) =>
+                    {
+                        animal.Specie = specie;
+                        animal.Owner = owner;
+                        return animal;
+                    },
+                    new { AnimalId = id },
+                    splitOn: "SpecieId, OwnerId"
+                ).FirstOrDefault();
 
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-                finally
-                {
-                    connection.Close();
-                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
-        public IList<Animal> GetAnimalsByOwnerId(int ownerId)
-        {
-            var connectionString = this.GetConnection();
-            List<Animal> animals = new List<Animal>();
+    }
 
-            using(var connection = new MySqlConnection(connectionString))
+    public IList<Animal> GetAnimalsByOwnerId(int ownerId)
+    {
+        using (var connection = CreateConnection())
+        {
+            try
             {
-                try
-                {
-                    connection.Open();
-                    string sql = @"
+                connection.Open();
+                string sql = @"
                     SELECT 
                         a.id AS AnimalId,
                         a.nome AS Name,
@@ -116,144 +100,120 @@ namespace VetVaxManager.Repository
                     WHERE 
                         a.id_proprietario = @OwnerId";
 
-                    var result = connection.Query<Animal, Specie, Owner, Animal>(
-                        sql,
-                        (animal, specie, owner) =>
-                        {
-                            animal.Specie = specie;
-                            animal.Owner = owner;
-                            return animal;
-                        },
-                        new { OwnerId = ownerId },
-                        splitOn: "SpecieId, OwnerId"
-                    ).ToList();
-
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-                finally
-                {
-                    connection.Close();
-                }
-            }
-        }
-
-        public int NewAnimal(Animal animal)
-        {
-            var connectionString = this.GetConnection();
-            using (var connection = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-                    var query = @"
-                                INSERT INTO animais(nome, data_nascimento, sexo, raca, peso, vivo, id_proprietario, id_especie)
-                                VALUES(@Name, @DateOfBirth, @Sex, @Race, @Weight, @Alive, @OwnerId, @SpecieId);
-                                SELECT LAST_INSERT_ID();";
-
-                    var parameters = new
+                var result = connection.Query<Animal, Specie, Owner, Animal>(
+                    sql,
+                    (animal, specie, owner) =>
                     {
-                        Name = animal.Name,
-                        DateOfBirth = animal.DateOfBirth,
-                        Sex = animal.Sex,
-                        Race = animal.Race,
-                        Weight = animal.Weight,
-                        Alive = animal.Alive,
-                        OwnerId = animal.Owner.OwnerId,
-                        SpecieId = animal.Specie.SpecieId
-                    };
+                        animal.Specie = specie;
+                        animal.Owner = owner;
+                        return animal;
+                    },
+                    new { OwnerId = ownerId },
+                    splitOn: "SpecieId, OwnerId"
+                ).ToList();
 
-                    int id = connection.QuerySingle<int>(query, parameters);
-
-                    return id;
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-                finally
-                {
-                    connection.Close();
-                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
+    }
 
-        public IList<Specie> GetAllSpecies()
+    public int NewAnimal(Animal animal)
+    {
+        using (var connection = CreateConnection())
         {
-            var connectionString = this.GetConnection();
-            using (var connection = new MySqlConnection(connectionString))
+            try
             {
-                try
+                connection.Open();
+                var query = @"
+                                INSERT INTO animais(nome, data_nascimento, sexo, raca, peso, vivo, id_proprietario, id_especie)
+                                VALUES(@Name, @DateOfBirth, @Sex, @Race, @Weight, @Alive, @OwnerId, @SpecieId)
+                                RETURNING id;";
+
+                var parameters = new
                 {
-                    connection.Open();
-                    string sql = @"
+                    Name = animal.Name,
+                    DateOfBirth = animal.DateOfBirth,
+                    Sex = animal.Sex,
+                    Race = animal.Race,
+                    Weight = animal.Weight,
+                    Alive = animal.Alive,
+                    OwnerId = animal.Owner.OwnerId,
+                    SpecieId = animal.Specie.SpecieId
+                };
+
+                int id = connection.QuerySingle<int>(query, parameters);
+
+                return id;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+    }
+
+    public IList<Specie> GetAllSpecies()
+    {
+        using (var connection = CreateConnection())
+        {
+            try
+            {
+                connection.Open();
+                string sql = @"
                     SELECT
                         e.id AS SpecieId,
                         e.nome AS Name
                     FROM especies e";
 
-                    var result = connection.Query<Specie>(
-                        sql).ToList();
+                var result = connection.Query<Specie>(
+                    sql).ToList();
 
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-                finally
-                {
-                    connection.Close();
-                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
+    }
 
-        public int DeleteAnimalById(int id)
+    public int DeleteAnimalById(int id)
+    {
+        using (var connection = CreateConnection())
         {
-            var connectionString = this.GetConnection();
-            var countAnimals = 0;
-            var countVaccines = 0;
-            var countSchedule = 0;
-            using (var connection = new MySqlConnection(connectionString))
+            try
             {
-                try
-                {
-                    connection.Open();
+                connection.Open();
 
-                    var queryVaccine = "DELETE FROM vacinas WHERE id_animal=" + id;
-                    countVaccines = connection.Execute(queryVaccine);
+                var queryVaccine = "DELETE FROM vacinas WHERE id_animal = @Id";
+                var querySchedule = "DELETE FROM agendas WHERE id_animal = @Id";
+                var queryAnimals = "DELETE FROM animais WHERE id = @Id";
 
-                    var querySchedule = "DELETE FROM agendas WHERE id_animal=" + id;
-                    countSchedule = connection.Execute(querySchedule);
+                connection.Execute(queryVaccine, new { Id = id });
+                connection.Execute(querySchedule, new { Id = id });
+                int countAnimals = connection.Execute(queryAnimals, new { Id = id });
 
-                    var queryAnimals = "DELETE FROM animais WHERE id =" + id;
-                    countAnimals = connection.Execute(queryAnimals);                    
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-                finally
-                {
-                    connection.Close();
-                }
                 return countAnimals;
             }
-        }
-
-        public int UpdateAnimal(Animal animal)
-        {
-            var connectionString = this.GetConnection();
-            var count = 0;
-            using (var connection = new MySqlConnection(connectionString))
+            catch (Exception ex)
             {
-                try
-                {
-                    connection.Open();
-                    var query = @"
+                throw ex;
+            }
+        }
+    }
+
+    public int UpdateAnimal(Animal animal)
+    {
+        using (var connection = CreateConnection())
+        {
+            try
+            {
+                connection.Open();
+                var query = @"
                                 UPDATE animais
                                 SET nome = @Name,
                                     data_nascimento = @DateOfBirth,
@@ -263,29 +223,26 @@ namespace VetVaxManager.Repository
                                     vivo = @Alive,
                                     id_especie = @SpecieId
                                 WHERE id = @AnimalId";
-                    var parameters = new
-                    {
-                        Name = animal.Name,
-                        DateOfBirth = animal.DateOfBirth,
-                        Sex = animal.Sex,
-                        Race = animal.Race,
-                        Weight = animal.Weight,
-                        Alive = animal.Alive,
-                        SpecieId = animal.Specie.SpecieId,
-                        AnimalId = animal.AnimalId
-                    };
 
-                    count = connection.Execute(query, parameters);
-                }
-                catch (Exception ex)
+                var parameters = new
                 {
-                    throw ex;
-                }
-                finally
-                {
-                    connection.Close();
-                }
+                    Name = animal.Name,
+                    DateOfBirth = animal.DateOfBirth,
+                    Sex = animal.Sex,
+                    Race = animal.Race,
+                    Weight = animal.Weight,
+                    Alive = animal.Alive,
+                    SpecieId = animal.Specie.SpecieId,
+                    AnimalId = animal.AnimalId
+                };
+
+                int count = connection.Execute(query, parameters);
+
                 return count;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

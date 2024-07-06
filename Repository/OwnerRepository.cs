@@ -1,32 +1,22 @@
 ﻿using Dapper;
-using MySql.Data.MySqlClient;
 using VetVaxManager.Models;
 
-namespace VetVaxManager.Repository
+namespace VetVaxManager.Repository;
+
+public class OwnerRepository : BaseRepository, IOwnerRepository
 {
-    public class OwnerRepository : IOwnerRepository
+    public OwnerRepository(IConfiguration configuration) : base(configuration)
     {
-        IConfiguration _configuration;
-        public OwnerRepository(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-        public string GetConnection()
-        {
-            var connection = _configuration.GetSection("ConnectionStrings").GetSection("MySQLConnection").Value;
-            return connection;
-        }
+    }
 
-        public Owner GetOwnerById(int id)
+    public Owner GetOwnerById(int id)
+    {
+        using (var connection = CreateConnection())
         {
-            var connectionString = this.GetConnection();
-
-            using (var connection = new MySqlConnection(connectionString))
+            try
             {
-                try
-                {
-                    connection.Open();
-                    string sql = @"
+                connection.Open();
+                string sql = @"
                     SELECT 
                         p.id AS OwnerId,
                         p.nome AS Name,
@@ -41,34 +31,25 @@ namespace VetVaxManager.Repository
                     WHERE 
                         p.id = @OwnerId";
 
-                    var result = connection.Query<Owner>(
-                        sql,
-                        new { OwnerId = id }
-                    ).FirstOrDefault();
+                var result = connection.QueryFirstOrDefault<Owner>(sql, new { OwnerId = id });
 
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-                finally
-                {
-                    connection.Close();
-                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
+    }
 
-        public int UpdateOwner(Owner owner)
+    public int UpdateOwner(Owner owner)
+    {
+        using (var connection = CreateConnection())
         {
-            var connectionString = this.GetConnection();
-            var count = 0;
-            using (var connection = new MySqlConnection(connectionString))
+            try
             {
-                try
-                {
-                    connection.Open();
-                    var query = @"
+                connection.Open();
+                var query = @"
                                 UPDATE proprietarios
                                 SET nome = @Name,
                                     sobrenome = @LastName,
@@ -78,29 +59,24 @@ namespace VetVaxManager.Repository
                                     email = @Email,
                                     telefone = @Phone
                                 WHERE id = @OwnerId";
-                    var parameters = new
-                    {
-                        Name = owner.Name,
-                        LastName = owner.LastName,
-                        DateOfBirth = owner.DateOfBirth,
-                        Sex = owner.Sex,
-                        Cpf = owner.Cpf,
-                        Email = owner.Email,
-                        Phone = owner.Phone,
-                        OwnerId = owner.OwnerId
-                    };
+                var parameters = new
+                {
+                    Name = owner.Name,
+                    LastName = owner.LastName,
+                    DateOfBirth = owner.DateOfBirth,
+                    Sex = owner.Sex,
+                    Cpf = owner.Cpf,
+                    Email = owner.Email,
+                    Phone = owner.Phone,
+                    OwnerId = owner.OwnerId
+                };
 
-                    count = connection.Execute(query, parameters);
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-                finally
-                {
-                    connection.Close();
-                }
+                int count = connection.Execute(query, parameters);
                 return count;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }
