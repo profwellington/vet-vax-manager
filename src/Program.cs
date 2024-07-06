@@ -19,12 +19,11 @@ builder.Services.AddTransient<IOwnerRepository, OwnerRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 
 // Configuração da autenticação e cookies
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/User/Login"; // Caminho para a página de login
-        options.LogoutPath = "/User/Logout"; // Caminho para a página de logout
-    });
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+{
+    options.LoginPath = "/User/Login"; // Caminho para a página de login
+    options.LogoutPath = "/User/Logout"; // Caminho para a página de logout
+});
 
 // Habilitar sessões
 builder.Services.AddSession(options =>
@@ -40,22 +39,16 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    app.UseHsts(); // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 // Habilitar autenticação e sessões
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Animal}/{action=MyAnimals}/{id?}");
-
+app.MapControllerRoute( name: "default", pattern: "{controller=Animal}/{action=MyAnimals}/{id?}");
 app.Run();

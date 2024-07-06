@@ -1,74 +1,73 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using BCrypt.Net;
 using VetVaxManager.Models;
 using VetVaxManager.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
-using System.Globalization;
+using System.Collections.ObjectModel;
 
-namespace VetVaxManager.Controllers
+namespace VetVaxManager.Controllers;
+
+public class UserController : Controller
 {
-    public class UserController : Controller
+    private readonly IUserRepository _userRepository;
+    public UserController(IUserRepository userRepository)
     {
-        IUserRepository _userRepository;
-        public UserController(IUserRepository userRepository)
-        {
-            _userRepository = userRepository;
-        }
+        _userRepository = userRepository;
+    }
 
-        public IActionResult Register()
-        {
-            return View();
-        }
+    [HttpGet]
+    public IActionResult Register()
+    {
+        return View();
+    }
 
-        [HttpPost]
-        public IActionResult Register(User user)
-        {
-            if (ModelState.IsValid)
-            {
-                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-                var userId = _userRepository.NewUser(user);
-                return RedirectToAction("Login");
-            }
+    [HttpPost]
+    public IActionResult Register(User user)
+    {
+        if (!ModelState.IsValid)
             return View(user);
-        }
 
-        public IActionResult Login()
+        user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+        _ = _userRepository.NewUser(user);
+        return RedirectToAction("Login");
+    }
+
+    [HttpGet]
+    public IActionResult Login()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Login(string username, string password)
+    {
+        User user = _userRepository.GetByUsername(username);
+        if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
         {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Login(string username, string password)
-        {
-            var user = _userRepository.GetByUsername(username);
-            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
-            {
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.Owner.Name),
-                    new Claim("Username", user.Username),
-                    new Claim("OwnerId", user.Owner.OwnerId.ToString())
-                };
-
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var authProperties = new AuthenticationProperties { IsPersistent = true };
-
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity), authProperties);
-
-                return RedirectToAction("MyAnimals", "Animal");
-            }
-            return RedirectToAction("MyAnimals", "Animal");
+            //TODO(Error): não está apresentando mensagem de erro
             ModelState.AddModelError(string.Empty, "Usuário ou senha inválidos");
             return View();
         }
 
-        public async Task<IActionResult> Logout()
+        Collection<Claim> claims = new()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login");
-        }
+            new(ClaimTypes.Name, user.Owner.Name),
+            new("Username", user.Username),
+            new("OwnerId", user.Owner.OwnerId.ToString())
+        };
+
+        ClaimsIdentity claimsIdentity = new(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        AuthenticationProperties authProperties = new() { IsPersistent = true };
+
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+        return RedirectToAction("MyAnimals", "Animal");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        return RedirectToAction("Login");
     }
 }

@@ -1,11 +1,10 @@
 ﻿using VetVaxManager.Models;
 
-namespace VetVaxManager.ViewModels
+namespace VetVaxManager.ViewModels;
+
+public class AnimalDetailsViewModel
 {
-    public class AnimalDetailsViewModel
-    {
-        public Animal Animal { get; set; }
-        public IList<Calendar> Calendar { get; set; }
-        public IList<Vaccine> Vaccines { get; set; }
-    }
+    public Animal? Animal { get; set; }
+    public IList<Calendar>? Calendar { get; set; }
+    public IList<Vaccine>? Vaccines { get; set; }
 }

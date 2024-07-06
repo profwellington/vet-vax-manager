@@ -1,14 +1,13 @@
 ﻿using VetVaxManager.Models;
 
-namespace VetVaxManager.Repository
+namespace VetVaxManager.Repository;
+
+public interface IVaccineRepository
 {
-    public interface IVaccineRepository
-    {
-        IList<VaccinationSchedule> GetVaccinationSchedules();
-        IList<Vaccine> GetAllVaccinesByAnimalId(int animalId);
-        Vaccine GetVaccineById(int id);
-        int DeleteVaccineById(int id);
-        int NewVaccine(Vaccine vaccine);
-        int UpdateVaccine(Vaccine vaccine);
-    }
+    IList<VaccinationSchedule> GetVaccinationSchedules();
+    IList<Vaccine> GetAllVaccinesByAnimalId(int animalId);
+    Vaccine GetVaccineById(int id);
+    int DeleteVaccineById(int id);
+    int NewVaccine(Vaccine vaccine);
+    int UpdateVaccine(Vaccine vaccine);
 }

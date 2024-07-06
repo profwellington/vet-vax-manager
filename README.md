@@ -11,3 +11,7 @@ However, due to time limitations, the scope was reduced to focus exclusively on 
 In the first stage, examples of similar medical clinic management systems, used as a basis for the veterinary system, are presented. 
 This stage also discusses the MVC design pattern adopted for development, the use cases created, and the functional and non-functional requirements derived from these use cases. 
 In the second stage, the elements responsible for building the system are detailed, including the entity-relationship diagram, the mapping of the relational model derived from this diagram, the definition of database tables, the system's source code components, and the final screens after implementation.
+
+## Tools
+- Visual Studio 2022
+- pgAdmin 4 or Azure Data Studio

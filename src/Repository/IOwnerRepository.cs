@@ -1,10 +1,9 @@
 ﻿using VetVaxManager.Models;
 
-namespace VetVaxManager.Repository
+namespace VetVaxManager.Repository;
+
+public interface IOwnerRepository
 {
-    public interface IOwnerRepository
-    {
-        Owner GetOwnerById(int ownerId);
-        int UpdateOwner(Owner owner);
-    }
+    Owner GetOwnerById(int ownerId);
+    int UpdateOwner(Owner owner);
 }

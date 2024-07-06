@@ -1,8 +1,7 @@
-﻿namespace VetVaxManager.Models
+﻿namespace VetVaxManager.Models;
+
+public class Specie
 {
-    public class Specie
-    {
-        public int SpecieId { get; set; }
-        public string? Name { get; set; }
-    }
+    public int SpecieId { get; set; }
+    public string? Name { get; set; }
 }

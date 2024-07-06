@@ -1,10 +1,9 @@
 ﻿using VetVaxManager.Models;
 
-namespace VetVaxManager.Repository
+namespace VetVaxManager.Repository;
+
+public interface IUserRepository
 {
-    public interface IUserRepository
-    {
-        int NewUser(User user);
-        User GetByUsername(string username);
-    }
+    int NewUser(User user);
+    User GetByUsername(string username);
 }

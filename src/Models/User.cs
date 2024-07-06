@@ -1,10 +1,9 @@
-﻿namespace VetVaxManager.Models
+﻿namespace VetVaxManager.Models;
+
+public class User
 {
-    public class User
-    {
-        public int UserId { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public Owner Owner { get; set; }
-    }
+    public int UserId { get; set; }
+    public string Username { get; set; }
+    public string Password { get; set; }
+    public Owner Owner { get; set; }
 }
